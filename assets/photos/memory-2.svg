@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<rect width="400" height="400" fill="#dfeaf2"/>
+<circle cx="200" cy="180" r="120" fill="#3f6e8c" opacity="0.15"/>
+<text x="200" y="230" text-anchor="middle" font-size="150" fill="#3f6e8c" font-family="Georgia, 'Times New Roman', serif">▲</text>
+<text x="200" y="355" text-anchor="middle" font-size="30" fill="#3f6e8c" font-family="Georgia, 'Times New Roman', serif" font-style="italic">Photo 2</text>
+</svg>

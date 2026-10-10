@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+<rect width="800" height="600" fill="#dfe6ea"/>
+<rect y="420" width="800" height="180" fill="#9fb3bd"/>
+<g fill="#c9b7a6"><rect x="300" y="140" width="80" height="280"/><rect x="420" y="140" width="80" height="280"/><rect x="280" y="260" width="240" height="160"/></g>
+<g fill="#5d4c5a"><path d="M300 140 L340 60 L380 140Z"/><path d="M420 140 L460 60 L500 140Z"/></g>
+<g fill="#f7f3ee" opacity="0.8"><rect x="325" y="180" width="30" height="50" rx="15"/><rect x="445" y="180" width="30" height="50" rx="15"/></g>
+<text x="400" y="540" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#2b2a33" font-style="italic">Photo du lieu mystère — À REMPLACER</text>
+</svg>
