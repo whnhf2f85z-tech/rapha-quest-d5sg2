@@ -53,7 +53,7 @@ export default {
   // 5 = chemin le plus rapide, 6 = où est-ce ?
   // Jamais d'indice sur ce qui est vendu !
   clues: [
-    'Le logo de la boutique est vert sapin. (À REMPLACER)',
+    'Indice : couleurs du pays de l’aigle à deux têtes',
     'Le nom de la rue commence par la même lettre que ton prénom. (À REMPLACER)',
     'C’est dans la vieille ville, rive gauche de la Limmat. (À REMPLACER)',
     'Il y a une fontaine à moins de 50 pas de la porte. (À REMPLACER)',
