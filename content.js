@@ -96,7 +96,7 @@ export default {
   memory: {
     // 8 photos carrées (~400 px). À REMPLACER.
     images: [
-      'assets/photos/memory-1.svg',
+      'assets/photos/memory-1.jpg',
       'assets/photos/memory-2.svg',
       'assets/photos/memory-3.svg',
       'assets/photos/memory-4.svg',
