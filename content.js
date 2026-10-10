@@ -54,7 +54,7 @@ export default {
   // Jamais d'indice sur ce qui est vendu !
   clues: [
     'Indice : couleurs du pays de l’aigle à deux têtes',
-    'Indice : la rue commence comme Aldo. Aldo a jeté son dé : ce qu’il reste de lui se cache presque tout entier dans le nom de la rue.',
+    'Indice : la rue commence comme Aldo. Aldo a jeté son dé : tout ce qu’il reste de lui se cache dans le nom de la rue.',
     'C’est dans la vieille ville, rive gauche de la Limmat. (À REMPLACER)',
     'Il y a une fontaine à moins de 50 pas de la porte. (À REMPLACER)',
     'Depuis la boutique, on voit presque l’Hôtel de ville. (À REMPLACER)',
