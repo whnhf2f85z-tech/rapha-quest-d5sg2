@@ -107,7 +107,7 @@ export default {
     ],
     text: {
       title: 'Memory',
-      instruction: 'Retrouve les 8 paires. Ta mémoire contre la mienne.',
+      instruction: 'Retrouve les 8 paires.',
       moves: '{n} coups',
       movesOne: '{n} coup', // 0 ou 1
       pairs: '{n} / 8 paires',
