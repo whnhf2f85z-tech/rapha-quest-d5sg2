@@ -15,7 +15,7 @@ export default {
     pageTitle: 'Raphaëlle — la quête',
     notebookButton: 'Carnet',
     notebookTitle: 'Carnet de piste',
-    notebookIntro: 'Tout ce que tu as gagné jusqu’ici. Relis-le, il ne mord pas.',
+    notebookIntro: 'Examine chaque indice avec attention : ensemble, ils mènent à ton cadeau. Aucun n’est là par hasard.',
     notebookLocked: 'Indice encore verrouillé',
     close: 'Fermer',
     soundOn: 'Son activé',
