@@ -1526,3 +1526,26 @@ h2 {
   border-bottom: 2px solid var(--accent);
   margin: 0 0.15em;
 }
+
+.ranking {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.ranking ol {
+  margin: 0;
+  padding-left: 1.6em;
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+
+.ranking li::marker {
+  font-family: var(--serif);
+  color: var(--accent-ink);
+}
+
+.ranking .text-input {
+  width: 100%;
+}

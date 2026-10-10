@@ -170,10 +170,21 @@ export default {
         fact: 'L’éléphant d’Asie, l’éléphant de savane et l’éléphant de forêt d’Afrique, reconnu comme une espèce à part entière.',
         nudge: 'L’Afrique en compte plus d’une.',
       },
+      {
+        // Question à classement : pas de choix proposés, elle tape les pays dans l'ordre.
+        // accepted = autres orthographes acceptées pour chaque place.
+        // Chiffres : estimations récentes (recensements nationaux, UICN) — à revérifier si tu veux.
+        type: 'ranking',
+        question: 'Cite les 4 pays qui comptent le plus d’éléphants, du premier au quatrième.',
+        answer: ['Botswana', 'Zimbabwe', 'Tanzanie', 'Kenya'],
+        accepted: [[], [], ['Tanzania'], []],
+        fact: 'Le Botswana en abrite à lui seul environ 130 000, presque un tiers des éléphants d’Afrique.',
+        nudge: 'Les quatre sont en Afrique : deux au sud du continent, deux à l’est.',
+      },
     ],
     text: {
       title: 'Culture générale',
-      instruction: 'Six questions sur les éléphants, zéro faute autorisée.',
+      instruction: 'Sept questions sur les éléphants, zéro faute autorisée. Les éléphants comptent sur toi.',
       counter: 'Question {n} sur {total}',
       wrong: [
         'Presque. Mais presque, ça ne compte qu’à la pétanque.',
@@ -181,6 +192,9 @@ export default {
         'Non. L’éléphant est déçu. Et il s’en souviendra.',
       ],
       right: 'Exact.',
+      rankingPlaceholder: 'Pays',
+      rankingLabel: 'Pays numéro {n}',
+      rankingPartial: '{n} sur {total} à la bonne place.',
       nextQuestion: 'Question suivante',
       finish: 'Terminer',
     },
