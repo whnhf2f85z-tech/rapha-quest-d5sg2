@@ -173,13 +173,13 @@ export default {
       {
         // Question à classement : pas de choix proposés, elle tape les pays dans l'ordre.
         // accepted = autres orthographes acceptées pour chaque place.
-        // Chiffres : estimations récentes (recensements nationaux, UICN) — à revérifier si tu veux.
+        // Chiffres : Botswana 131 909 (2022), Gabon 95 000 (2021), Zimbabwe 65 028 (2022), Tanzanie 60 000 (2024).
         type: 'ranking',
         question: 'Cite les 4 pays qui comptent le plus d’éléphants, du premier au quatrième.',
-        answer: ['Botswana', 'Zimbabwe', 'Tanzanie', 'Kenya'],
-        accepted: [[], [], ['Tanzania'], []],
-        fact: 'Le Botswana en abrite à lui seul environ 130 000, presque un tiers des éléphants d’Afrique.',
-        nudge: 'Les quatre sont en Afrique : deux au sud du continent, deux à l’est.',
+        answer: ['Botswana', 'Gabon', 'Zimbabwe', 'Tanzanie'],
+        accepted: [[], [], [], ['Tanzania']],
+        fact: 'Le Botswana en abrite environ 130 000. La surprise, c’est le Gabon : 95 000 éléphants de forêt, comptés en 2021 grâce à l’ADN de leurs crottes.',
+        nudge: 'Les quatre sont en Afrique : deux au sud, un à l’est, et un caché dans la forêt équatoriale.',
       },
     ],
     text: {
