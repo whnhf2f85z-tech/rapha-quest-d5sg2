@@ -79,14 +79,13 @@ export default {
   //  2. Le taquin
   // --------------------------------------------------------------------------
   taquin: {
-    image: 'assets/photos/puzzle.svg', // À REMPLACER par une photo carrée (~1000 px), ex. assets/photos/puzzle.jpg
+    image: 'assets/photos/puzzle.jpg', // photo carrée (~1000 px)
     size: 3, // 3 = grille 3×3, 4 = grille 4×4
     text: {
       title: 'Le taquin',
-      instruction: 'Touche une pièce voisine du trou pour la glisser. Oui, comme en 1880.',
+      instruction: '', // vide = pas de ligne sous le titre
       moves: '{n} coups',
       movesOne: '{n} coup', // 0 ou 1
-      reference: 'Modèle',
       solved: 'Brillant. Comme prévu.',
     },
   },

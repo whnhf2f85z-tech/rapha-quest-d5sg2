@@ -677,32 +677,6 @@ h2 {
   opacity: 1;
 }
 
-.taquin-side {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.taquin-ref {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.taquin-ref img {
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: var(--shadow);
-}
-
-.taquin-ref figcaption {
-  font-size: 0.85rem;
-  color: var(--ink-soft);
-}
-
 /* ------------------------------------------------------------ 3. memory */
 
 .memory-grid {
@@ -1498,27 +1472,6 @@ h2 {
 }
 
 @media (min-width: 860px) {
-  .taquin-wrap {
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
-  .taquin-side {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .taquin-ref {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .taquin-ref img {
-    width: 140px;
-    height: 140px;
-  }
-
   .final-grid {
     grid-template-columns: 1fr 300px;
     align-items: start;

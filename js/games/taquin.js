@@ -141,17 +141,7 @@ export default {
 
     el.append(
       stageHeader(X.title, X.instruction),
-      h(
-        'div',
-        { class: 'taquin-wrap' },
-        board,
-        h(
-          'aside',
-          { class: 'taquin-side' },
-          h('figure', { class: 'taquin-ref' }, h('img', { src: T.image, alt: '' }), h('figcaption', {}, X.reference)),
-          counter,
-        ),
-      ),
+      h('div', { class: 'taquin-wrap' }, board, counter),
       message,
     );
     layout();
