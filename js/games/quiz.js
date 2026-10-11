@@ -104,7 +104,17 @@ export default {
             'aria-label': t(X.rankingLabel, { n: k + 1 }),
           }),
         );
+        // Editing a field clears its colour from the previous try.
+        fields.forEach((f) => f.addEventListener('input', () => f.classList.remove('rank-ok', 'rank-near')));
         const submit = h('button', { class: 'btn btn-primary', type: 'submit' }, ctx.common.validate);
+        const legend = h(
+          'p',
+          { class: 'rank-legend' },
+          h('span', { class: 'rank-key rank-ok' }),
+          X.rankingRight,
+          h('span', { class: 'rank-key rank-near' }),
+          X.rankingNear,
+        );
         body = h(
           'form',
           { class: 'ranking' },
@@ -113,21 +123,25 @@ export default {
             {},
             fields.map((f) => h('li', {}, f)),
           ),
+          legend,
           submit,
         );
         body.addEventListener('submit', (e) => {
           e.preventDefault();
           if (answered) return;
           if (fields.some((f) => !normalise(f.value))) return fields.find((f) => !normalise(f.value)).focus();
-          const ok = fields.map((f, k) =>
-            [q.answer[k], ...(q.accepted?.[k] || [])].map(normalise).includes(normalise(f.value)),
-          );
-          const good = ok.filter(Boolean).length;
-          if (good === fields.length) {
+          // Which place of the real ranking each answer matches (-1 = not in it).
+          const spellings = q.answer.map((a, k) => [a, ...(q.accepted?.[k] || [])].map(normalise));
+          const places = fields.map((f) => spellings.findIndex((s) => s.includes(normalise(f.value))));
+          places.forEach((p, k) => {
+            fields[k].classList.toggle('rank-ok', p === k);
+            fields[k].classList.toggle('rank-near', p >= 0 && p !== k);
+          });
+          if (places.every((p, k) => p === k)) {
             fields.forEach((f) => (f.disabled = true));
             submit.disabled = true;
             right();
-          } else wrong(t(X.rankingPartial, { n: good, total: fields.length }));
+          } else wrong();
         });
       } else {
         const options = q.options.map((label, k) =>
