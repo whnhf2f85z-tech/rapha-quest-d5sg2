@@ -1,9 +1,11 @@
-// Classic 9×9 sudoku with a number pad and pencil notes. On purpose, it never
-// says whether the grid is right: no red digits, no check. Once every cell is
-// filled she can move on. The starred cell holds « the number » the riddle
-// needs; she has to remember it herself (and get it right).
+// Classic 9×9 sudoku with a number pad and pencil notes. No red digits while
+// she plays; when the grid is full, « J'ai fini » checks it against the hash of
+// the solution (so the solution, and the starred digit, never appear in the
+// code) and only says right or wrong, never where. The starred cell holds
+// « the number » the riddle needs; she has to remember it herself.
 
-import { h, t, stageHeader } from '../ui.js';
+import { h, t, stageHeader, replayAnimation } from '../ui.js';
+import { sha256 } from '../crypto.js';
 
 const peersOf = (i) => {
   const r = Math.floor(i / 9);
@@ -101,20 +103,32 @@ export default {
         });
       }
       ctx.sound('tap');
+      message.textContent = '';
       persist();
       render();
     }
 
-    function finish() {
-      if (!full()) return;
+    async function finish() {
+      if (!full() || done) return;
+      finishBtn.disabled = true;
+      const ok = (await sha256(grid.join(''))) === S.solutionHash;
+      finishBtn.disabled = false;
+      if (!ok) {
+        ctx.sound('wrong');
+        replayAnimation(board, 'shake');
+        message.className = 'message error';
+        message.textContent = X.notYet;
+        return;
+      }
       done = true;
+      message.className = 'message success';
       persist();
       pad.remove();
       finishBtn.remove();
       board.classList.add('solved');
       render();
       message.textContent = X.filled;
-      ctx.onSolved({ celebrate: false });
+      ctx.onSolved();
     }
 
     const board = h('div', { class: 'sudoku-board' }, cells);

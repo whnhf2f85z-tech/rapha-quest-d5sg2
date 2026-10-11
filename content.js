@@ -205,22 +205,26 @@ export default {
   //  5. Sudoku
   //  81 chiffres ligne par ligne, 0 = case vide. highlight = la case étoilée
   //  (ligne et colonne de 1 à 9), elle doit être vide dans « puzzle ».
-  //  Le site ne vérifie pas la grille. Prends une grille à solution unique et
-  //  note toi-même le bon chiffre de la case étoilée : c'est celui que ton
-  //  énigme utilise (avec cette grille, c'est 5).
+  //  Pas de chiffres en rouge pendant le jeu ; quand la grille est pleine, le
+  //  bouton vérifie la solution sans dire où est l'erreur. Prends une grille à
+  //  solution unique. Le chiffre de la case étoilée (5 ici) est celui de l'énigme.
   // --------------------------------------------------------------------------
   sudoku: {
     puzzle: '530070000600195000098000060800060003400803001700020006060000280000419005000080079',
+    // Empreinte de la solution complète (81 chiffres), fabriquée avec tools/hash.html
+    // (partie « Tester une réponse »). La solution elle-même n'est jamais écrite ici.
+    solutionHash: '4c5e72057519c48e1a2430cbedb7cff3a4a1d244eb28b8d865f85141f643017d',
     highlight: { row: 5, col: 5 },
     text: {
       title: 'Sudoku',
-      instruction: 'Un classique. Personne ne te dira si c’est juste. Et garde un œil sur la case étoilée.',
+      instruction: 'Un classique. Garde un œil sur la case étoilée.',
       pencil: 'Notes',
       erase: 'Effacer',
       cellLabel: 'Ligne {r}, colonne {c}',
       starLabel: 'case étoilée',
       finish: 'J’ai fini',
-      filled: 'Grille remplie. Retiens bien le chiffre de la case étoilée : tu en auras besoin.',
+      notYet: 'Pas encore. Il y a au moins une erreur quelque part. Je ne dirai pas où.',
+      filled: 'Grille juste. Retiens bien le chiffre de la case étoilée : tu en auras besoin.',
     },
   },
 
