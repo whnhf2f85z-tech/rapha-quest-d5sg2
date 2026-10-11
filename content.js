@@ -55,7 +55,7 @@ export default {
   clues: [
     'Indice : couleurs du pays de l’aigle à deux têtes',
     'Indice : la rue commence comme Aldo. Aldo a jeté son dé : tout ce qu’il reste de lui se cache dans le nom de la rue.',
-    'C’est dans la vieille ville, rive gauche de la Limmat. (À REMPLACER)',
+    'Indice : les pièces du taquin le faisaient sans cesse. Garde le début du verbe, ajoute un i grec, et atterris à l’est d’Amiens.',
     'Il y a une fontaine à moins de 50 pas de la porte. (À REMPLACER)',
     'Depuis la boutique, on voit presque l’Hôtel de ville. (À REMPLACER)',
     'Le nom de la boutique commence par un B. (À REMPLACER)',
@@ -368,7 +368,7 @@ export default {
   final: {
     shop: { lat: 47.373, lng: 8.541 }, // À REMPLACER : la porte de la boutique
     radiusMeters: 200,
-    map: { lat: 47.3769, lng: 8.5417, zoom: 13 },
+    map: { lat: 46.6, lng: 2.4, zoom: 6 }, // vue de départ : la France entière, pour ne rien dévoiler
     accepted: [
       {
         hash: '3f2ff815a286d3e436213d1e1f6ad72258d17388427b83184c862d3ba51d2613',
