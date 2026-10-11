@@ -2,7 +2,7 @@
 // Lock 2: the shop's name, checked by hash; it also decrypts the pickup card.
 
 import { h, t, stageHeader, messageLine, renderNudges, replayAnimation, invitationCard } from '../ui.js';
-import { createMap, haversine, pinIcon } from '../map.js';
+import { createMap, haversine, editablePin } from '../map.js';
 import { hashAnswer, decryptWithAnswer } from '../crypto.js';
 
 export default {
@@ -54,7 +54,7 @@ export default {
       map = createMap(mapEl, F.map);
       map.on('click', (e) => {
         if (pin) pin.setLatLng(e.latlng);
-        else pin = L.marker(e.latlng, { icon: pinIcon(), keyboard: false }).addTo(map);
+        else pin = editablePin(map, e.latlng, { deleteLabel: ctx.common.removePin, onRemove: () => (pin = null) });
         ctx.sound('tap');
       });
 
@@ -67,6 +67,7 @@ export default {
           ctx.sound('win');
           msg.show(X.lock1Done, 'success');
           submit.disabled = true;
+          pin.lock();
           setTimeout(() => {
             cleanup();
             lock2();

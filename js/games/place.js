@@ -1,7 +1,7 @@
 // « Où est-ce ? »: drop a pin where the photo was taken, within 1 km.
 
 import { h, t, stageHeader, messageLine, formatNumber } from '../ui.js';
-import { createMap, haversine, pinIcon } from '../map.js';
+import { createMap, haversine, pinIcon, editablePin } from '../map.js';
 
 export default {
   id: 'place',
@@ -38,7 +38,10 @@ export default {
 
     function setPin(latlng) {
       if (pin) pin.setLatLng(latlng);
-      else pin = L.marker(latlng, { icon: pinIcon(), keyboard: false }).addTo(map);
+      else {
+        pin = editablePin(map, latlng, { deleteLabel: ctx.common.removePin, onRemove: () => (pin = null) });
+        if (done) pin.lock();
+      }
     }
 
     function reveal(guess) {
@@ -57,6 +60,7 @@ export default {
       if (d <= P.radiusMeters) {
         done = true;
         submit.disabled = true;
+        pin.lock();
         ctx.save({ ...saved, pin: [guess.lat, guess.lng] });
         reveal([guess.lat, guess.lng]);
         msg.show(t(X.right, { meters: formatNumber(Math.round(d)) }), 'success');

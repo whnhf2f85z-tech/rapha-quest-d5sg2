@@ -54,3 +54,36 @@ export function labelIcon(text, kind = '') {
   span.textContent = text;
   return L.divIcon({ className: '', html: span.outerHTML, iconSize: null, iconAnchor: [0, 0] });
 }
+
+// A pin she can drag to fine-tune, and remove with a right-click or the small
+// bin on its side (phones have no right-click). Calls onRemove once removed.
+export function editablePin(map, latlng, { deleteLabel, onRemove }) {
+  const marker = L.marker(latlng, {
+    icon: L.divIcon({
+      className: '',
+      html: `<span class="pin-wrap"><span class="pin"></span><button type="button" class="pin-delete" aria-label="${deleteLabel}" title="${deleteLabel}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 28],
+    }),
+    keyboard: false,
+    draggable: true,
+  }).addTo(map);
+  const remove = () => {
+    marker.remove();
+    onRemove();
+  };
+  marker.on('contextmenu', (e) => {
+    L.DomEvent.preventDefault(e.originalEvent);
+    remove();
+  });
+  marker.on('click', (e) => {
+    if (e.originalEvent.target.closest('.pin-delete')) remove();
+  });
+  // Once the answer is found, the pin stays put.
+  marker.lock = () => {
+    marker.dragging?.disable();
+    marker.off('contextmenu').off('click');
+    marker.getElement()?.querySelector('.pin-delete')?.remove();
+  };
+  return marker;
+}

@@ -28,6 +28,7 @@ export default {
     readOnlyNote: 'Épreuve déjà réussie. On admire, on ne touche plus.',
     lockedStage: 'Pas encore. Chaque chose en son temps.',
     nudgeTitle: 'Coup de pouce',
+    removePin: 'Retirer l’épingle',
     progressLabel: 'Progression',
     resetDone: 'Progression effacée. On repart de zéro.',
     loadError: 'Oups, une image refuse de se montrer. Recharge la page.',

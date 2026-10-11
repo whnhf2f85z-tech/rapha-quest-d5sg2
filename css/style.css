@@ -1549,3 +1549,45 @@ h2 {
 .ranking .text-input {
   width: 100%;
 }
+
+.pin-wrap {
+  position: relative;
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.leaflet-marker-draggable .pin {
+  cursor: grab;
+}
+
+.leaflet-dragging .pin {
+  cursor: grabbing;
+}
+
+.pin-delete {
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 3px 8px rgba(43, 42, 51, 0.25);
+  cursor: pointer;
+}
+
+.pin-delete svg {
+  width: 15px;
+  height: 15px;
+}
+
+.pin-delete:hover {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
