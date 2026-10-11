@@ -442,7 +442,8 @@ export default {
     message:
       'Ici, ton petit mot personnel. Quelques lignes, pas plus : l’essentiel est déjà dans la boutique. (À REMPLACER)',
     signature: '— Léa',
-    photo: 'assets/photos/birthday.svg', // facultatif : '' pour ne rien afficher
+    photo: 'assets/photos/birthday.jpg', // facultatif : '' pour ne rien afficher
+    photoCaption: 'Archive rarissime : la seule photo où je suis plus grande que toi. Elle sera encadrée.',
     video: '', // facultatif, ex. 'assets/photos/video.mp4' (remplace la photo)
     reopenCard: 'Revoir l’invitation',
   },

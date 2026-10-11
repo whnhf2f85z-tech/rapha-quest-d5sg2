@@ -1600,3 +1600,21 @@ h2 {
   background: var(--accent-soft);
   color: var(--accent-ink);
 }
+
+.birthday-figure {
+  margin: 8px 0;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.birthday-figure .birthday-media {
+  margin: 0;
+}
+
+.birthday-figure figcaption {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 26em;
+}

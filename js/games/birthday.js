@@ -10,7 +10,12 @@ export default {
     const media = B.video
       ? h('video', { class: 'birthday-media', src: B.video, controls: true, playsinline: true, preload: 'metadata' })
       : B.photo
-        ? h('img', { class: 'birthday-media', src: B.photo, alt: '' })
+        ? h(
+            'figure',
+            { class: 'birthday-figure' },
+            h('img', { class: 'birthday-media', src: B.photo, alt: '' }),
+            B.photoCaption ? h('figcaption', {}, B.photoCaption) : null,
+          )
         : null;
 
     const dialog = h('dialog', { class: 'sheet' });
