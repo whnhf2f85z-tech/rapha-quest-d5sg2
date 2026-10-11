@@ -1,8 +1,8 @@
-// Pick a half-day, confirm, send it to Léa. With a Formspree form it is sent
-// automatically; without one (or if sending fails) a ready-written e-mail opens
-// instead, and she can still continue.
+// Pick one or more half-days, confirm, send them to Léa. With a Formspree form
+// they are sent automatically; without one (or if sending fails) a
+// ready-written e-mail opens instead, and she can still continue.
 
-import { h, t, stageHeader, capitalise } from '../ui.js';
+import { h, t, stageHeader, capitalise, joinList } from '../ui.js';
 
 export default {
   id: 'halfday',
@@ -16,18 +16,26 @@ export default {
     const area = h('div', { class: 'halfday-area' });
     el.append(stageHeader(X.title, X.instruction), area);
 
-    const chosen = ctx.state().slot;
-    if (chosen) {
-      area.append(h('p', { class: 'locked-choice' }, t(X.locked, { day: chosen.day, part: chosen.part })));
+    // « mercredi 21 octobre, l'après-midi et jeudi 22 octobre, le matin »
+    const describe = (slots) => joinList(slots.map((s) => `${s.day}, ${s.part}`), X.and);
+
+    const chosen = ctx.state().slots;
+    if (chosen?.length) {
+      area.append(h('p', { class: 'locked-choice' }, t(X.locked, { when: describe(chosen) })));
       if (!ctx.readOnly) ctx.onSolved({ celebrate: false });
       return;
     }
 
-    function slotFor(day, part) {
-      return { id: `${day.id}-${part.key}`, date: day.id, day: day.long, part: part.long };
-    }
+    const slotFor = (day, part) => ({ id: `${day.id}-${part.key}`, date: day.id, day: day.long, part: part.long });
+    const order = D.days.flatMap((day) => PARTS.map((part) => slotFor(day, part).id));
+    let picked = [];
 
     function renderPicker() {
+      const validate = h(
+        'button',
+        { class: 'btn btn-primary', disabled: !picked.length, onclick: renderConfirm },
+        picked.length ? t(picked.length > 1 ? X.validateMany : X.validateOne, { n: picked.length }) : X.validateNone,
+      );
       area.replaceChildren(
         h(
           'div',
@@ -40,13 +48,21 @@ export default {
               PARTS.map((part) => {
                 const slot = slotFor(day, part);
                 const off = D.disabled.includes(slot.id);
+                const on = picked.some((p) => p.id === slot.id);
                 return h(
                   'button',
                   {
-                    class: `slot${off ? ' slot-off' : ''}`,
+                    class: `slot${off ? ' slot-off' : ''}${on ? ' picked' : ''}`,
                     disabled: off,
+                    'aria-pressed': off ? null : String(on),
                     'aria-label': `${day.short} ${off ? X.taken : part.label}`,
-                    onclick: () => renderConfirm(slot),
+                    onclick: () => {
+                      ctx.sound('tap');
+                      picked = on
+                        ? picked.filter((p) => p.id !== slot.id)
+                        : [...picked, slot].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+                      renderPicker();
+                    },
                   },
                   part.label,
                   off ? h('span', { class: 'slot-taken' }, X.taken) : null,
@@ -55,37 +71,39 @@ export default {
             ),
           ),
         ),
+        h('div', { class: 'actions center halfday-validate' }, validate),
       );
     }
 
-    const mailHref = (slot) =>
+    const mailHref = (slots) =>
       `mailto:${D.leaEmail}?subject=${encodeURIComponent(D.emailSubject)}&body=${encodeURIComponent(
-        t(X.mailBody, { day: slot.day, part: slot.part }),
+        t(X.mailBody, { when: describe(slots) }),
       )}`;
 
-    function lockAndContinue(slot) {
-      ctx.update({ slot: { id: slot.id, day: slot.day, part: slot.part } });
-      area.replaceChildren(h('p', { class: 'locked-choice' }, t(X.locked, { day: slot.day, part: slot.part })));
+    function lockAndContinue(slots) {
+      ctx.update({ slots: slots.map(({ id, day, part }) => ({ id, day, part })) });
+      area.replaceChildren(h('p', { class: 'locked-choice' }, t(X.locked, { when: describe(slots) })));
       ctx.onSolved();
     }
 
-    function renderConfirm(slot) {
+    function renderConfirm() {
+      const slots = picked;
       ctx.sound('tap');
       const actions = h('div', { class: 'actions' });
       // Without a Formspree form, go straight to the e-mail: no failed attempt first.
       const primary = D.formspreeEndpoint
-        ? h('button', { class: 'btn btn-primary', onclick: () => send(slot, primary) }, X.send)
+        ? h('button', { class: 'btn btn-primary', onclick: () => send(slots, primary) }, X.send)
         : h(
             'a',
             {
               class: 'btn btn-primary',
-              href: mailHref(slot),
+              href: mailHref(slots),
               onclick: () =>
                 setTimeout(
                   () =>
                     actions.replaceChildren(
-                      h('button', { class: 'btn btn-primary', onclick: () => lockAndContinue(slot) }, X.continueAnyway),
-                      h('a', { class: 'btn btn-ghost', href: mailHref(slot) }, X.mailAgain),
+                      h('button', { class: 'btn btn-primary', onclick: () => lockAndContinue(slots) }, X.continueAnyway),
+                      h('a', { class: 'btn btn-ghost', href: mailHref(slots) }, X.mailAgain),
                     ),
                   300,
                 ),
@@ -97,7 +115,7 @@ export default {
         h(
           'div',
           { class: 'confirm-card' },
-          h('p', { class: 'confirm-text' }, t(X.confirm, { Day: capitalise(slot.day), day: slot.day, part: slot.part })),
+          h('p', { class: 'confirm-text' }, t(X.confirm, { When: capitalise(describe(slots)) })),
           D.formspreeEndpoint ? null : h('p', { class: 'muted' }, X.mailIntro),
           actions,
         ),
@@ -105,15 +123,13 @@ export default {
       primary.focus();
     }
 
-    async function send(slot, btn) {
+    async function send(slots, btn) {
       btn.disabled = true;
       btn.textContent = X.sending;
       const payload = {
         _subject: D.emailSubject,
-        jour: slot.day,
-        date: slot.date,
-        moment: slot.part,
-        creneau: slot.id,
+        choix: describe(slots),
+        creneaux: slots.map((s) => s.id).join(', '),
         envoye_le: new Date().toISOString(),
       };
       let ok = false;
@@ -128,7 +144,7 @@ export default {
         ok = false;
       }
       if (ok) {
-        ctx.update({ slot: { id: slot.id, day: slot.day, part: slot.part } });
+        ctx.update({ slots: slots.map(({ id, day, part }) => ({ id, day, part })) });
         area.replaceChildren(h('p', { class: 'message success' }, X.sent));
         ctx.onSolved();
         return;
@@ -141,8 +157,8 @@ export default {
           h(
             'div',
             { class: 'actions' },
-            h('a', { class: 'btn btn-primary', href: mailHref(slot) }, X.mailButton),
-            h('button', { class: 'btn btn-ghost', onclick: () => lockAndContinue(slot) }, X.continueAnyway),
+            h('a', { class: 'btn btn-primary', href: mailHref(slots) }, X.mailButton),
+            h('button', { class: 'btn btn-ghost', onclick: () => lockAndContinue(slots) }, X.continueAnyway),
           ),
         ),
       );

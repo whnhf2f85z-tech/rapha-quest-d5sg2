@@ -330,7 +330,7 @@ export default {
     // ex. 'https://formspree.io/f/abcdwxyz'. Vide = c'est le bouton e-mail qui s'affiche.
     formspreeEndpoint: 'https://formspree.io/f/mjygobkr',
     leaEmail: 'lea.lurois@laposte.net',
-    emailSubject: 'Raphaëlle a choisi sa demi-journée',
+    emailSubject: 'Raphaëlle a choisi ses demi-journées',
     days: [
       { id: '2026-10-21', short: 'Mer. 21 oct.', long: 'mercredi 21 octobre' },
       { id: '2026-10-22', short: 'Jeu. 22 oct.', long: 'jeudi 22 octobre' },
@@ -345,13 +345,17 @@ export default {
     text: {
       title: 'Ta demi-journée',
       instruction:
-        'Choisis une demi-journée entre le 21 et le 27 octobre où tu pourras faire le trajet jusqu’à la destination mystère.',
+        'Choisis une ou plusieurs demi-journées entre le 21 et le 27 octobre où tu pourras faire le trajet jusqu’à la destination mystère.',
       morning: 'Matin',
       afternoon: 'Après-midi',
       morningLong: 'le matin',
       afternoonLong: 'l’après-midi',
       taken: 'Déjà pris. Désolée.',
-      confirm: '{Day}, {part}. C’est noté dans le marbre ?',
+      validateNone: 'Choisis au moins une demi-journée',
+      validateOne: 'Valider ce choix',
+      validateMany: 'Valider ces {n} demi-journées',
+      and: 'et',
+      confirm: '{When}. C’est noté dans le marbre ?',
       send: 'Oui, envoyer',
       change: 'Changer',
       sending: 'Envoi…',
@@ -360,36 +364,48 @@ export default {
       mailButton: 'Envoyer par e-mail',
       mailIntro: 'Envoie-moi ton choix par e-mail, puis reviens ici pour continuer.',
       mailAgain: 'Rouvrir l’e-mail',
-      mailBody: 'Coucou Léa, je choisis le {day}, {part}. Raphaëlle',
+      mailBody: 'Coucou Léa, je suis disponible : {when}. Raphaëlle',
       continueAnyway: 'C’est envoyé, on continue',
-      locked: 'Ton choix : {day}, {part}. Pour changer, écris-moi directement.',
+      locked: 'Ton choix : {when}. Pour changer, écris-moi directement.',
     },
   },
 
   // --------------------------------------------------------------------------
   //  10. Le grand final
   //  accepted : fabriqué avec tools/hash.html (le hash du nom + la carte chiffrée).
-  //  Réponses d'exemple : voir README. N'écris JAMAIS le vrai nom ni l'adresse
-  //  dans ce fichier, même en commentaire : tout le monde peut le lire.
+  //  N'écris JAMAIS le vrai nom ni l'adresse en clair dans ce fichier,
+  //  même en commentaire : tout le monde peut le lire.
   // --------------------------------------------------------------------------
   final: {
-    shop: { lat: 47.373, lng: 8.541 }, // À REMPLACER : la porte de la boutique
+    shop: { lat: 49.86565, lng: 2.3755 }, // l’entrée du magasin
     radiusMeters: 200,
     map: { lat: 46.6, lng: 2.4, zoom: 6 }, // vue de départ : la France entière, pour ne rien dévoiler
     accepted: [
       {
-        hash: '3f2ff815a286d3e436213d1e1f6ad72258d17388427b83184c862d3ba51d2613',
-        card: 'sojDx2PhcFJm9XeT5XCFOQ==.+tRtetlPL7QAg6+7.QXqWG41yn/KA1S1jD7rU85IBf0aA9vzbKNjUw/i1GxhFXAADxWZskieftn4ansont1qyOuR0A8KlX2w+FOtmVInyM2u2q4AQmGXSQ8dAcKDcECOF5fSF3DHHQV5rCIsLeJYRowUEIXhT1NJrn3ajleaEGYcBiZz2dU8be5PUSr3qjUUZJA+vuY4VBKGkI49Eejba7OkK+a7+hTzsvfWUt7ePH+tzoH0YR/XiGCwMz8os48014fxj1YMaJbRvWKUg9kEOl9iPL/DFxk5Ig7mB6wq8qNWvm19oiZOxTPgEP7nHAL49XzVyjs5pLY/qSgI00Gw5nocaHO0FoFKuDPuhMLpWZ2EWexFVPE5nPqgIV4qk3+62fSTSR/oMNGHl3K/MKJ9GlUxveEnPj9I92KUsgjl/nJ7ignAJ4ogKpJqu4lLQxnRsKsvcZVzLvVOkhXPAY95hW3jrRBt9fc/C+8lwzO+xd+zNII2xRBVEbQrijSB1EKHH6zaQAfUuubrJEEHWNDz0Sbum',
+        hash: 'f8b2dff342e23fdc9e58dd1a4871a2aee83ea34c4f852b3aab109c91910aa41e',
+        card: 'Ive9YsDDm0yyVp25+YojVA==.rgITomrsi1HWCaNh.XiO9D9dtadKZBpX0WgEFA5sKgXVssMUMJCekbNnje7UidcFbdUyuMH+g2KoRwthAnSjpaZfUBixbkipRJtyru/D+VBZHdjTvXdDJdHzpqMeL+w32VZ2S272mZQTB2BhjkuuiJCRQXxUdOa7jyGwgLGbvflCAnE7fW0Cc7bLtHWHnvjwCdurl7jSxiMnDx2JVZfvYdflhhTOpPryDqtbb85wh2C9eUWkxMBqj4h8vTm6EQFUiqxUX7/hdLdyJIo1wdn8felGQdZOUWF7evr6VHUTc+8EjNZnpuayRH9aL2EgNXEtTsvc1AQ==',
       },
       {
-        hash: 'b77ad2edf199a4b4479347afaf387d435a12480d0dc5b8e042c4c8991587d080',
-        card: 'ocE8kQMyI9KME7OUI652GQ==.gna2jjyXTj7FnFuj.c1nB+u2okvAs2fdt388t3nqajO9fde92+ZIh5m+Qc57+QX7JkzUM6lh+qLouPyigzycTHtc1sRCsn22L18lWhGngWcdyCC78e6Y4tzQLhl5YBQwb1A1pDR5mHwoNPYxx5uKQZ1EZLEbjZbOYGEmSTNnBPuOTHbi47mx7sieqLflOqiQCr3UspxVo6N82j4fbqFqWkthNBub+uhFOzX/8K7q9PIn5vA59Byx9O1EankjR9tTN7PoiryBlVyh8SNtBP1ileQf8QybxavI4rui0kF+ohbfgqRr5dyZTDbuOQ4GP9W6xiz/Yw6wTPRu5KamzhVIG5xnZ7p6KqE6KlBsx9QWIYkCV425DQl1q8M5vvfZj7F1JMolCA0pUgcGt1Zy7hUgM9h4IHtVzsnIEcl/A6HLyqcohshH/ymi5e5W1dAGMPyygaFvh/ph3OEyRTlAl2IwWH6/YUzZ1ktUBh1HCjrLYBlmRdS1lFDpWa5zVlaum1uPsWwkay+BRWBj/gb9WnmfKhyux',
+        hash: '793cec325ac62d8a789dbd454cee22a0d3b0fc3eec71710da5c100baef1fbf97',
+        card: 'wr523QCFwN+bjYe00WBPUA==.Q04+i8F4SSNtA2f/.mgE67Vr66K6/dcUOyHExaVGhcNxlbFfJKVzLlXatk2jblXe8p9FCUvFMlM4ef8L4oECVB7qhQ6W97nLM3wS20mmQX9Y3g+fqpDeeFSTwQKOpZ0NZF8J6C2dBawJwgIOsFPmCooYct6uHQbTx9bvLaq/U/rKLkpOMNwkq1BLbfMJ1dLL6TfT6oTLiEOLE63ezYNnW4NXd8g+svqw4EQPMS7/PTyLyLwP7r3z2cxn8t211tiJxGCsifTlLJFrI/b7hIF41QQeg9XeoG6WVya9oOHOzpiBVwgAGNTnbdubcSY5PWI4y4joe9g==',
+      },
+      {
+        hash: 'd092c880c462f3eb4e1f6276b8c6e23524246731d4991f7d88d66a488ea40b62',
+        card: 'RFQJ+Lk5vKTwIQAC8Ez5bg==.pwTUbbYijaLfCpAi.8tyIEwovop/6Tb1Z5DPeH/w0V/ePWe3sNjWfCL0DFZsaAncMJQPSdD1q0cbWEVe0qfGIVdqxxA+5npDVCt4gqWJjs8pwe7piNqP83N1AVLvgybEDrdxX1P7Pi2Ec/x3u9iWXPp0H+BbFYRxo0WNNtAe2TkAyyXw8r8nk+exzmS5xpqJKJzW4aIFIinUe2pgnG1DcrymGsWXoemcBpscvLvJ1Ia1MjCCdwIe0mV0AEj1cimQnehVzF5DAKxvK7gXJh8LFn9qhBx4jG1Od7/NOQJbopfv/eIEDgkwBgOCdQA4mXjgY9angDg==',
+      },
+      {
+        hash: '9fc835f14d5ef1e6f73eea0ad6bdf2d08cc43e483a5cc9c03e30f1c6cd4a7ff3',
+        card: 'QHmdmXaQ0ElkarpjgJiwCA==.S5EcGPF4JAbNSvoA.SrOA6oCbPevXi7OZvPNi4F9UZl0p/FJN3KY0ii4D2L3qavuR1rnAtYcCUFZ4vNFzoaxi+NXhrwrqKVZSQXyGmAl1/dYQYafMw0IPEX/MGZ38sLJYM0q0RYqb5jI5K2NZWEdIAS4xECyzoykbS2sQRdH5p+qlz5QiQ0iZvDkRgOQC1JwFsRslbfwTh/4o6AQlLksgIxrjN7B0jKPNx7f1zZ/y9rXXXdguiVT0vuVjuIU9IjoEH4khEwYcNz3aYk2SLYPv6/xsTYuh0E7N9yLHoDp4TdyfnvT03+pBj+rBsEdeZNFv/e6yKA==',
+      },
+      {
+        hash: '0b60fe129185e1d4cc216c681b562779b2821d1ae6afb7e113660147ce1e40f6',
+        card: 'UmqZE4TJsoRD1MmyLSut4Q==.Uo55bLy1a9dRs7TV.ZtlpBap+F+1nMJkp3PIgqWs/zZXkIzISdyn8hRUBYhjw65Yaa9OKw0JbEHf6RTUqqMPmDb9XjHVdsUWaoQlA+EwB6gkTdt38qdR7QVR6yP9eygKohbqcOQbBF2ZYI1EobWXNVxV1yia5OFsOqzskL0J+Q9tbyOAdtYk85wC1+vcMSFD/9Enq8Dj0q6bZQpuGxn2ZGDJDosmuND9wnavJY5DF5KnkxEcdzQl2rBkZZZ4xg05qdNBer9D6OIeSG9YyN/1o5yybMy+OS3uOryr9LOUc4joq8AHHEI7Tf4ODdf2Q5TINt4Isdw==',
       },
     ],
     nudges: [
-      'Relis l’indice sur le logo. (À REMPLACER)',
-      'Le nom tient en un seul mot… ou presque. (À REMPLACER)',
-      'B comme… (À REMPLACER)',
+      'Relis l’indice des mousquetaires : ce sont eux les patrons.',
+      'Un logo aux couleurs de l’Albanie, et on y fait ses courses.',
+      'Le nom commence comme le club de Milan qui n’est pas l’AC.',
     ],
     text: {
       title: 'Le grand final',
@@ -409,7 +425,9 @@ export default {
       cardKicker: 'Invitation',
       cardTitle: 'Ton cadeau t’attend ici',
       openMaps: 'Ouvrir dans Maps',
-      rendezvous: 'Rendez-vous {day}, {part}.',
+      rendezvousOne: 'Rendez-vous {when}. Demande-moi l’heure précise.',
+      rendezvousMany: 'Rendez-vous {when}. Demande-moi le jour et l’heure précise.',
+      or: 'ou',
       hoursLabel: 'Horaires',
       counterLabel: 'Au comptoir, dis simplement',
       next: 'Et maintenant…',

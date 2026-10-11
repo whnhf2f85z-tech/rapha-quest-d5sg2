@@ -8,7 +8,7 @@ const fresh = () => ({
   started: false,
   clues: [], // indexes of unlocked clues (0–5)
   games: {}, // per-game saved state, keyed by game id
-  slot: null, // chosen half-day { id, day, part }
+  slots: [], // chosen half-days [{ id, day, part }]
   card: null, // decrypted pickup card, once solved
   sound: false,
 });

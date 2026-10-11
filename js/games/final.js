@@ -147,7 +147,7 @@ export default {
     // ------------------------------------------------------------ reveal
     function showCard(card) {
       const next = h('button', { class: 'btn btn-primary btn-large', onclick: () => ctx.goNext() }, X.next);
-      area.replaceChildren(invitationCard(card, ctx.state().slot, X), h('div', { class: 'actions center' }, next));
+      area.replaceChildren(invitationCard(card, ctx.state().slots, X), h('div', { class: 'actions center' }, next));
       setTimeout(() => next.focus({ preventScroll: true }), 50);
     }
 

@@ -29,6 +29,11 @@ export function capitalise(s) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
+// « a », « a et b », « a, b et c »
+export function joinList(items, and) {
+  return items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} ${and} ${items.at(-1)}`;
+}
+
 export function formatNumber(n, digits = 0) {
   return Number(n).toLocaleString('fr-CH', { maximumFractionDigits: digits, minimumFractionDigits: digits });
 }
@@ -72,7 +77,7 @@ export function renderNudges(box, nudges, wrongs, title) {
 }
 
 // The pickup invitation card (used in the final stage and on the birthday screen).
-export function invitationCard(card, slot, text) {
+export function invitationCard(card, slots, text) {
   return h(
     'article',
     { class: 'invitation' },
@@ -83,7 +88,16 @@ export function invitationCard(card, slot, text) {
     card.mapsUrl
       ? h('a', { class: 'btn btn-ghost', href: card.mapsUrl, target: '_blank', rel: 'noopener' }, text.openMaps)
       : null,
-    slot ? h('p', { class: 'invitation-when' }, t(text.rendezvous, { day: slot.day, part: slot.part })) : null,
+    slots?.length
+      ? h(
+          'p',
+          { class: 'invitation-when' },
+          // One half-day: she asks for the time. Several: she asks for the day too.
+          t(slots.length > 1 ? text.rendezvousMany : text.rendezvousOne, {
+            when: joinList(slots.map((s) => `${s.day}, ${s.part}`), text.or),
+          }),
+        )
+      : null,
     card.hours
       ? h('div', { class: 'invitation-row' }, h('span', {}, text.hoursLabel), h('p', {}, card.hours))
       : null,

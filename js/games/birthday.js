@@ -21,7 +21,7 @@ export default {
         h(
           'div',
           { class: 'notebook-inner' },
-          invitationCard(st.card, st.slot, ctx.C.final.text),
+          invitationCard(st.card, st.slots, ctx.C.final.text),
           h('button', { class: 'btn btn-ghost', onclick: () => dialog.close() }, ctx.common.close),
         ),
       );

@@ -1247,8 +1247,19 @@ h2 {
 }
 
 .slot:hover:not(:disabled) {
+  background: var(--paper-2);
+}
+
+.slot.picked,
+.slot.picked:hover {
   background: var(--ink);
   color: var(--paper);
+}
+
+.halfday-validate {
+  position: sticky;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  margin-top: 16px;
 }
 
 .slot-off {
