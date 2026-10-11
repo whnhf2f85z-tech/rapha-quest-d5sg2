@@ -21,12 +21,16 @@ export function pathLength(points) {
 }
 
 // `fit` (optional): bounds to fit once the container has its final size.
-export function createMap(el, { lat, lng, zoom = 13 }, fit = null) {
+// `plain: true` draws no background map at all (only what the game adds),
+// like travle.earth: no place names to give the answer away.
+export function createMap(el, { lat, lng, zoom = 13 }, fit = null, { plain = false } = {}) {
   const map = L.map(el, { scrollWheelZoom: false, zoomSnap: 0.25 }).setView([lat, lng], zoom);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
+  if (plain) el.classList.add('map-plain');
+  else
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
   // The stage fades in, so the container size settles a moment later.
   const settle = () => {
     map.invalidateSize();

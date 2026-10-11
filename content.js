@@ -267,43 +267,42 @@ export default {
   },
 
   // --------------------------------------------------------------------------
-  //  7. Le chemin le plus rapide
-  //  Elle touche la carte (n'importe où dans le monde) pour choisir ses villes
-  //  étapes, dans l'ordre. Le site trouve le nom de chaque ville et calcule
-  //  lui-même le vrai trajet le plus rapide en voiture (OpenStreetMap, gratuit).
-  //  Gagné quand elle a au moins minStops villes, toutes à moins de corridorKm
-  //  de ce trajet, dans le bon ordre. Pas besoin d'écrire la réponse.
-  //  Villes seulement : jamais d'adresse exacte ici, ce fichier est public.
+  //  7. Le chemin le plus rapide (comme travle.earth)
+  //  Elle part de la Somme et doit nommer, dans l'ordre, les départements et
+  //  cantons traversés par le trajet le plus rapide jusqu'au canton de Zurich.
+  //  Bonne étape = en vert sur la carte ; mauvaise = en rouge, et on recommence.
+  //  Trajet calculé avec OpenStreetMap (OSRM), en passant par Bâle :
+  //  10 étapes, stockées en hash pour ne pas donner la réponse.
+  //  Contours : assets/data/regions.json (départements + cantons).
   // --------------------------------------------------------------------------
   route: {
-    start: { name: 'Amiens', lat: 49.8942, lng: 2.2957 },
-    end: { name: 'Zurich', lat: 47.3769, lng: 8.5417 },
-    minStops: 10,
-    maxStops: 25,
-    corridorKm: 15, // distance max entre une ville et le trajet le plus rapide
+    start: 'fr-80', // Somme
+    end: 'ch-Zurich',
+    steps: [
+      '5942139ef9bb315621b057884bf2e69fb813d66f5b09e535002473c0edb6eeec',
+      'ddabe6a0a7c238e41a346bacc33b07f1ae6dbc6d71476599b06281cda382e8c3',
+      '7a66fa671bdc937a286367307061f3e4ca04dec8fe298bc3b2da43cedca60967',
+      'a9f9a3f94e85e6e9efcd6ce8ddd079b669df52739ee3061b115ef825fb347c13',
+      '1145548ab4815344b2bd6859542283b08095d9bafe255e77878907c46d5c18d0',
+      '51bb96e9b58299b74dd2c77c40d580802e969fd508152a8eac807847e44d13c7',
+      '631a2a312ff53fafc32ddbc8d23cd62c6a31e58117a23b2e81e10cc5f18b502e',
+      '66d48d171a47b5622fe8718d8b90aa8bfc1cfca20fec531b22971e6955489225',
+      '0ae77295a7a1a9134ec17c6785c196c7a55f9c67038932fdf800a2c0b282f12f',
+      'f3084c8b3a01d3cecf27a6589f1b13bef91a515591e43136625ff37a9ef341fd',
+    ],
     text: {
       title: 'Le chemin le plus rapide',
       instruction:
-        'De chez toi ({start}) à chez moi ({end}), par le chemin le plus rapide. Touche la carte pour choisir au moins {n} villes étapes, dans l’ordre. Les kilomètres comptent, la vitesse aussi.',
+        'De la Somme jusqu’au canton de Zurich, par la route la plus rapide : quels départements et cantons traverses-tu, dans l’ordre ? Une erreur, et on repart de la Somme.',
+      placeholder: 'Département ou canton',
+      add: 'Ajouter',
       startLabel: 'Départ',
       endLabel: 'Arrivée',
-      stopsLabel: 'Tes étapes ({n}/{min})',
-      noStops: 'Aucune étape pour l’instant. Touche une ville sur la carte.',
-      looking: 'Je cherche le nom de cette ville…',
-      noCity: 'Pas de ville ici. Que de l’eau, ou presque.',
-      duplicate: '{city} est déjà dans ton trajet.',
-      tooFewStops: 'Il faut au moins {n} villes étapes. Pas de téléportation.',
-      tooManyStops: '{n} étapes maximum. C’est un trajet, pas un tour du monde.',
-      remove: 'Retirer {city}',
-      undo: 'Annuler la dernière étape',
-      restart: 'Recommencer',
-      validate: 'Vérifier mon trajet',
-      computing: 'Calcul de l’itinéraire…',
-      offline: 'Le GPS fait la sieste. Réessaie dans un instant.',
-      offOne: 'Une de tes villes t’oblige à un détour. Les détours, c’est pour les vacances.',
-      offMany: '{n} de tes villes t’obligent à un détour. Les détours, c’est pour les vacances.',
-      disorder: 'Les bonnes villes, mais dans le désordre : tu fais des allers-retours.',
-      right: 'Imbattable : {km} km en {time}, le trajet le plus rapide. Tu viens quand tu veux.',
+      unknown: 'Je ne connais pas « {name} ». Un département français ou un canton suisse, s’il te plaît.',
+      already: '{name} est déjà dans ton trajet.',
+      wrong: '{name} ? Raté, ce n’est pas la suite du trajet. Retour dans la Somme.',
+      right: 'Bien vu, {name}.',
+      won: 'Arrivée à Zurich, sans le moindre détour. Tu viens quand tu veux.',
     },
   },
 

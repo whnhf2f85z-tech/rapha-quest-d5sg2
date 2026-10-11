@@ -1,74 +1,24 @@
-// Fastest route, free style. She taps anywhere on the map (the whole world) to
-// add stop cities, in order. Each tap is named with OpenStreetMap's geocoder
-// (Nominatim). The real fastest driving route comes from the public OSRM
-// router (real roads, real speeds). Both are free and need no key.
-// Won when she has at least minStops cities, all within corridorKm of that
-// fastest route, in the right order. Nobody has to write the answer down.
+// Fastest route, travle.earth style. Starting from the Somme, she names the
+// départements and cantons the fastest road to Zurich goes through, in order.
+// Each guess is drawn on the map: green if it's the right next step, red if
+// not (and then the trip starts again from the Somme). The expected steps are
+// stored as hashes, so the answer is not readable in the code.
 
-import { h, t, stageHeader, messageLine, formatNumber } from '../ui.js';
-import { createMap, labelIcon } from '../map.js';
+import { h, t, stageHeader, messageLine } from '../ui.js';
+import { createMap } from '../map.js';
+import { sha256, normalise } from '../crypto.js';
 
-const GEOCODER = 'https://nominatim.openstreetmap.org/reverse';
-const ROUTER = 'https://router.project-osrm.org/route/v1/driving/';
+const COLOURS = { start: '#b5656b', end: '#2b2a33', ok: '#3f6b4f', ko: '#a33b3b' };
+const OUTLINE = { color: '#b9b2a8', weight: 0.7, fill: false, interactive: false };
 
-function formatDuration(min) {
-  const total = Math.round(min);
-  const hours = Math.floor(total / 60);
-  const rest = total % 60;
-  return hours ? `${hours} h ${String(rest).padStart(2, '0')}` : `${rest} min`;
-}
-
-// Nominatim asks for at most one request per second: queue them.
-let lastLookup = 0;
-let queue = Promise.resolve();
-function cityAt(lat, lng) {
-  const job = queue.then(async () => {
-    const wait = Math.max(0, lastLookup + 1100 - Date.now());
-    if (wait) await new Promise((r) => setTimeout(r, wait));
-    lastLookup = Date.now();
-    const url = `${GEOCODER}?format=jsonv2&zoom=10&accept-language=fr&lat=${lat}&lon=${lng}`;
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!res.ok) throw new Error('geocoder');
-    const d = await res.json();
-    if (d.error) return null;
-    const a = d.address || {};
-    return a.city || a.town || a.village || a.municipality || a.hamlet || d.name || a.county || a.state || null;
-  });
-  queue = job.catch(() => {});
-  return job;
-}
-
-async function fastestRoute(from, to) {
-  const coords = [from, to].map((p) => `${p.lng.toFixed(5)},${p.lat.toFixed(5)}`).join(';');
-  const res = await fetch(`${ROUTER}${coords}?overview=simplified&geometries=geojson`);
-  const d = await res.json();
-  if (d.code !== 'Ok' || !d.routes?.length) throw new Error('router');
-  const r = d.routes[0];
-  return {
-    km: r.distance / 1000,
-    min: r.duration / 60,
-    line: r.geometry.coordinates.map(([lng, lat]) => [+lat.toFixed(4), +lng.toFixed(4)]),
-  };
-}
-
-// Distance (km) from a point to the route, and how far along the route it sits.
-function placeOnRoute(p, line) {
-  const kx = 111.32 * Math.cos((p.lat * Math.PI) / 180);
-  const ky = 110.57;
-  let best = { km: Infinity, at: 0 };
-  for (let i = 1; i < line.length; i++) {
-    const ax = (line[i - 1][1] - p.lng) * kx;
-    const ay = (line[i - 1][0] - p.lat) * ky;
-    const bx = (line[i][1] - p.lng) * kx;
-    const by = (line[i][0] - p.lat) * ky;
-    const dx = bx - ax;
-    const dy = by - ay;
-    const len2 = dx * dx + dy * dy || 1e-9;
-    const u = Math.min(1, Math.max(0, -(ax * dx + ay * dy) / len2));
-    const km = Math.hypot(ax + u * dx, ay + u * dy);
-    if (km < best.km) best = { km, at: i - 1 + u };
-  }
-  return best;
+// « canton de Zurich », « département de la Marne » → « zurich », « marne »
+function stripPrefix(text) {
+  return String(text)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/^(le |la |les |l')?(canton|departement)( de la| de l'| des| du| de| d')?\s*/, '');
 }
 
 export default {
@@ -76,231 +26,136 @@ export default {
   mount(el, ctx) {
     const R = ctx.C.route;
     const X = R.text;
-    const saved = ctx.load() || {};
-    let stops = saved.stops || [];
-    let best = saved.best || null;
-    let done = ctx.readOnly || !!saved.won;
+    const saved = ctx.load();
+    let path = Array.isArray(saved?.path) ? saved.path : [];
+    let done = ctx.readOnly || path.length === R.steps.length;
     let busy = false;
 
-    const mapEl = h('div', {
-      class: 'map map-tall',
-      role: 'application',
-      'aria-label': X.title,
-    });
+    const mapEl = h('div', { class: 'map map-tall', role: 'application', 'aria-label': X.title });
     const msg = messageLine();
-    const panel = h('div', { class: 'trip-panel' });
-    el.append(
-      stageHeader(
-        X.title,
-        t(X.instruction, {
-          start: R.start.name,
-          end: R.end.name,
-          n: R.minStops,
-        }),
-      ),
-      mapEl,
-      panel,
-      msg,
-    );
+    const trail = h('p', { class: 'trip-trail' });
+    const field = h('input', {
+      class: 'text-input',
+      type: 'text',
+      autocomplete: 'off',
+      autocapitalize: 'words',
+      spellcheck: 'false',
+      placeholder: X.placeholder,
+      'aria-label': X.placeholder,
+      list: 'route-regions',
+    });
+    const submit = h('button', { class: 'btn btn-primary', type: 'submit' }, X.add);
+    const form = h('form', { class: 'answer-form' }, field, submit);
+    const datalist = h('datalist', { id: 'route-regions' });
 
-    const ends = L.latLngBounds([
-      [R.start.lat, R.start.lng],
-      [R.end.lat, R.end.lng],
-    ]);
-    const map = createMap(mapEl, { lat: R.start.lat, lng: R.start.lng, zoom: 6 }, ends.pad(0.3));
-    map.setMinZoom(2);
+    el.append(stageHeader(X.title, X.instruction), mapEl, trail, done ? null : form, datalist, msg);
 
-    for (const [p, label] of [
-      [R.start, X.startLabel],
-      [R.end, X.endLabel],
-    ]) {
-      L.marker([p.lat, p.lng], {
-        icon: labelIcon(`${label} · ${p.name}`, 'town-label is-here'),
-        keyboard: false,
-        interactive: false,
-        zIndexOffset: 3000,
-      }).addTo(map);
-    }
+    const map = createMap(mapEl, { lat: 48.6, lng: 5.4, zoom: 6 }, null, { plain: true });
+    map.setMinZoom(4);
+    map.attributionControl.addAttribution('Contours : france-geojson, Click that ’hood');
+    let regions = [];
+    const byId = {};
+    const layers = {};
 
-    const layer = L.layerGroup().addTo(map);
-    const persist = () => ctx.save({ stops, best, won: done && !ctx.readOnly ? true : saved.won });
+    const paint = (id, colour, opacity = 0.55) =>
+      layers[id]?.setStyle({ color: colour, weight: 1.5, fill: true, fillColor: colour, fillOpacity: opacity });
+    const unpaint = (id) => layers[id]?.setStyle(OUTLINE);
 
-    function draw() {
-      layer.clearLayers();
-      // No line while she plays (a straight line would hint at the way);
-      // the real fastest route is drawn once she has found it.
-      if (done && best) {
-        L.polyline(best.line, {
-          color: '#94474e',
-          weight: 5,
-          opacity: 0.9,
-        }).addTo(layer);
-      }
-      stops.forEach((s, i) => {
-        L.marker([s.lat, s.lng], {
-          icon: labelIcon(`${i + 1}. ${s.name}`, 'town-label is-visited'),
-          keyboard: false,
-          interactive: false,
-          zIndexOffset: 2000,
-        }).addTo(layer);
-      });
-    }
-
-    function render() {
-      draw();
-      panel.replaceChildren(
-        h(
-          'div',
-          { class: 'trip-panel-inner' },
-          h(
-            'p',
-            { class: 'trip-trail' },
-            h('span', { class: 'trip-trail-label' }, t(X.stopsLabel, { n: stops.length, min: R.minStops })),
-            [R.start, ...stops, R.end].map((p, i) => [
-              i ? h('span', { class: 'arrow', 'aria-hidden': 'true' }, '→') : null,
-              h('span', {}, p.name),
-            ]),
-          ),
-          stops.length
-            ? h(
-                'ol',
-                { class: 'stop-list' },
-                stops.map((s, i) =>
-                  h(
-                    'li',
-                    {},
-                    h('span', {}, s.name),
-                    done
-                      ? null
-                      : h(
-                          'button',
-                          {
-                            class: 'stop-remove',
-                            'aria-label': t(X.remove, { city: s.name }),
-                            onclick: () => removeAt(i),
-                          },
-                          '×',
-                        ),
-                  ),
-                ),
-              )
-            : h('p', { class: 'muted' }, X.noStops),
-          done
-            ? null
-            : h(
-                'div',
-                { class: 'actions' },
-                h(
-                  'button',
-                  {
-                    class: 'btn btn-primary',
-                    onclick: validate,
-                    disabled: busy,
-                  },
-                  X.validate,
-                ),
-                stops.length
-                  ? h(
-                      'button',
-                      {
-                        class: 'btn btn-ghost',
-                        onclick: () => removeAt(stops.length - 1),
-                      },
-                      X.undo,
-                    )
-                  : null,
-                stops.length ? h('button', { class: 'btn btn-ghost', onclick: restart }, X.restart) : null,
-              ),
-        ),
+    function find(text) {
+      const exact = normalise(text);
+      const stripped = normalise(stripPrefix(text));
+      const names = (r) => [r.name, ...r.aliases].map(normalise);
+      return (
+        regions.find((r) => names(r).includes(exact)) ||
+        regions.find((r) => names(r).includes(stripped)) ||
+        null
       );
     }
 
-    function changed() {
-      persist();
-      render();
+    function renderTrail() {
+      const ids = [R.start, ...path, done ? R.end : null].filter(Boolean);
+      const parts = [
+        ...ids.flatMap((id, i) => [
+          i ? h('span', { class: 'arrow', 'aria-hidden': 'true' }, '→') : null,
+          h('span', {}, byId[id]?.name || ''),
+        ]),
+        done ? null : h('span', { class: 'arrow', 'aria-hidden': 'true' }, '→ … →'),
+        done ? null : h('span', { class: 'muted' }, byId[R.end]?.name || ''),
+      ];
+      trail.replaceChildren(...parts.filter(Boolean));
     }
 
-    function removeAt(i) {
-      stops = stops.filter((_, k) => k !== i);
-      msg.show('');
-      changed();
-    }
-
-    function restart() {
-      stops = [];
-      msg.show('');
-      changed();
-    }
-
-    map.on('click', async (e) => {
-      if (done) return;
-      if (stops.length >= R.maxStops) return msg.show(t(X.tooManyStops, { n: R.maxStops }), 'error');
-      const { lat, lng } = e.latlng.wrap();
-      msg.show(X.looking);
-      let name;
-      try {
-        name = await cityAt(lat, lng);
-      } catch {
-        return msg.show(X.offline, 'error');
-      }
-      if (!name) return msg.show(X.noCity, 'error');
-      if (stops.some((s) => s.name === name)) return msg.show(t(X.duplicate, { city: name }), 'error');
-      stops = [...stops, { name, lat: +lat.toFixed(4), lng: +lng.toFixed(4) }];
-      ctx.sound('tap');
-      msg.show('');
-      changed();
-    });
-
-    async function validate() {
-      if (busy || done) return;
-      if (stops.length < R.minStops) return msg.show(t(X.tooFewStops, { n: R.minStops }), 'error');
-      busy = true;
-      render();
-      msg.show(X.computing);
-      try {
-        best ||= await fastestRoute(R.start, R.end);
-      } catch {
-        busy = false;
-        render();
-        return msg.show(X.offline, 'error');
-      }
-      busy = false;
-      const places = stops.map((s) => placeOnRoute(s, best.line));
-      const off = places.filter((p) => p.km > R.corridorKm).length;
-      const ordered = places.every((p, i) => i === 0 || p.at > places[i - 1].at);
-
-      if (!off && ordered) {
-        done = true;
-        persist();
-        render();
-        msg.show(
-          t(X.right, {
-            km: formatNumber(Math.round(best.km)),
-            time: formatDuration(best.min),
-          }),
-          'success',
-        );
-        ctx.onSolved();
+    async function guess(text) {
+      if (busy || done || !text.trim()) return;
+      const region = find(text);
+      if (!region) return msg.show(t(X.unknown, { name: text.trim() }), 'error');
+      if (region.id === R.start || path.includes(region.id))
+        return msg.show(t(X.already, { name: region.name }), 'error');
+      field.value = '';
+      const ok = (await sha256(`route:${region.id}`)) === R.steps[path.length];
+      if (ok) {
+        path = [...path, region.id];
+        ctx.save({ path });
+        paint(region.id, COLOURS.ok);
+        ctx.sound('tap');
+        if (path.length === R.steps.length) {
+          done = true;
+          form.remove();
+          msg.show(X.won, 'success');
+          renderTrail();
+          ctx.onSolved();
+          return;
+        }
+        msg.show(t(X.right, { name: region.name }), 'success');
+        renderTrail();
         return;
       }
-      persist();
-      render();
+      // Wrong: show it in red, then back to the Somme.
+      busy = true;
+      submit.disabled = true;
       ctx.sound('wrong');
-      if (off) msg.show(off === 1 ? X.offOne : t(X.offMany, { n: off }), 'error');
-      else msg.show(X.disorder, 'error');
+      paint(region.id, COLOURS.ko, 0.65);
+      msg.show(t(X.wrong, { name: region.name }), 'error');
+      setTimeout(() => {
+        unpaint(region.id);
+        path.forEach(unpaint);
+        path = [];
+        ctx.save({ path });
+        busy = false;
+        submit.disabled = false;
+        renderTrail();
+        field.focus();
+      }, 1800);
     }
 
-    render();
-    if (done && best) {
-      setTimeout(() => map.fitBounds(L.latLngBounds(best.line), { padding: [60, 60] }), 450);
-      msg.show(
-        t(X.right, {
-          km: formatNumber(Math.round(best.km)),
-          time: formatDuration(best.min),
-        }),
-        'success',
-      );
-    }
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      guess(field.value);
+    });
+
+    fetch('assets/data/regions.json')
+      .then((r) => r.json())
+      .then((data) => {
+        regions = data;
+        regions.forEach((r) => {
+          byId[r.id] = r;
+          const latlngs = r.shape.map((P) => P.map((ring) => ring.map(([x, y]) => [y, x])));
+          layers[r.id] = L.polygon(latlngs, OUTLINE).addTo(map);
+        });
+        datalist.replaceChildren(
+          ...[...regions]
+            .sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+            .map((r) => h('option', { value: r.name })),
+        );
+        paint(R.start, COLOURS.start);
+        paint(R.end, COLOURS.end, 0.45);
+        path.forEach((id) => paint(id, COLOURS.ok));
+        map.fitBounds(layers[R.start].getBounds().extend(layers[R.end].getBounds()), { padding: [20, 20] });
+        renderTrail();
+        if (done) msg.show(X.won, 'success');
+      })
+      .catch(() => msg.show(ctx.common.loadError, 'error'));
+
     return () => map.remove();
   },
 };

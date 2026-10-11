@@ -1675,3 +1675,8 @@ h2 {
   color: var(--ok);
   font-weight: 700;
 }
+
+.map.map-plain,
+.map-plain.leaflet-container {
+  background: var(--card);
+}
