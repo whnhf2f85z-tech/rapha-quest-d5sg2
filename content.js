@@ -95,6 +95,7 @@ export default {
   //  3. Memory
   // --------------------------------------------------------------------------
   memory: {
+    maxMoves: 15, // au-delà, tout se retourne et se remélange (0 = pas de limite)
     // 8 photos carrées (~400 px).
     images: [
       'assets/photos/memory-1.jpg',
@@ -108,18 +109,19 @@ export default {
     ],
     text: {
       title: 'Memory',
-      instruction: 'Retrouve les 8 paires.',
+      instruction: 'Retrouve les 8 paires en {max} coups maximum.',
       moves: '{n} coups',
       movesOne: '{n} coup', // 0 ou 1
+      movesOf: '{n} coups sur {max}',
+      tooMany: 'Plus de {max} coups : on retourne tout et on remélange. Concentration !',
       pairs: '{n} / 8 paires',
       cardLabel: 'Carte {n}',
     },
     // Message final selon le nombre de coups (le premier qui correspond gagne)
     endMessages: [
-      { maxMoves: 13, text: 'Mémoire d’éléphant. Élégant, l’éléphant.' },
-      { maxMoves: 18, text: 'Très propre. Je soupçonne un peu de chance, mais très propre.' },
-      { maxMoves: 26, text: 'Réussi. Avec du suspense, mais réussi.' },
-      { maxMoves: 9999, text: 'L’essentiel, c’est d’arriver. Et tu es arrivée.' },
+      { maxMoves: 11, text: 'Mémoire d’éléphant. Élégant, l’éléphant.' },
+      { maxMoves: 13, text: 'Très propre. Je soupçonne un peu de chance, mais très propre.' },
+      { maxMoves: 9999, text: 'Réussi. Avec du suspense, mais réussi.' },
     ],
   },
 
