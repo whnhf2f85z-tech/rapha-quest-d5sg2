@@ -59,7 +59,7 @@ export default {
     'Indice : les pièces du taquin le faisaient sans cesse. Garde le début du verbe, ajoute un i grec, et atterris.',
     'Indice : un pour tous, tous pour un. Ici, ce sont eux les patrons.',
     'Indice : comme à l’Inter Milan, ici, on a toujours le même objectif en vue.',
-    'Le nom de la boutique commence par un B. (À REMPLACER)',
+    'Indice : depuis chez toi, il te faut entre 13 minutes et 1 h 49 pour y aller, selon ton moyen de locomotion. Je te conseille plutôt les 13 minutes.',
   ],
 
   // --------------------------------------------------------------------------
