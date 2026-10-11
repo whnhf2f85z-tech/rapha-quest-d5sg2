@@ -1,5 +1,6 @@
 import { h, t, invitationCard } from '../ui.js';
 import { confetti } from '../fx.js';
+import { currentCard } from '../card.js';
 
 export default {
   id: 'birthday',
@@ -21,12 +22,13 @@ export default {
     const dialog = h('dialog', { class: 'sheet' });
     dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
 
-    function openCard() {
+    async function openCard() {
+      const card = await currentCard(ctx.C, st);
       dialog.replaceChildren(
         h(
           'div',
           { class: 'notebook-inner' },
-          invitationCard(st.card, st.slots, ctx.C.final.text),
+          invitationCard(card, st.slots, ctx.C.final.text),
           h('button', { class: 'btn btn-ghost', onclick: () => dialog.close() }, ctx.common.close),
         ),
       );

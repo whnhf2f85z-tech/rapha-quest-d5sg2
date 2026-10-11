@@ -4,6 +4,7 @@
 import { h, t, stageHeader, messageLine, renderNudges, replayAnimation, invitationCard } from '../ui.js';
 import { createMap, haversine, editablePin } from '../map.js';
 import { hashAnswer, decryptWithAnswer } from '../crypto.js';
+import { currentCard } from '../card.js';
 
 export default {
   id: 'final',
@@ -18,7 +19,7 @@ export default {
     el.append(area);
 
     const st = ctx.state();
-    if (st.card) showCard(st.card);
+    if (st.card) currentCard(ctx.C, st).then(showCard);
     else if (!saved.lock1) lock1();
     else lock2();
 
@@ -110,7 +111,7 @@ export default {
         submit.disabled = false;
         submit.textContent = ctx.common.validate;
         if (card) {
-          ctx.update({ card });
+          ctx.update({ card, cardKey: field.value.trim() });
           ctx.onSolved({ footer: false });
           showCard(card);
           return;
