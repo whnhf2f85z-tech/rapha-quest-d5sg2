@@ -99,7 +99,7 @@ export default {
     images: [
       'assets/photos/memory-1.jpg',
       'assets/photos/memory-2.jpg',
-      'assets/photos/memory-3.svg',
+      'assets/photos/memory-3.jpg',
       'assets/photos/memory-4.svg',
       'assets/photos/memory-5.svg',
       'assets/photos/memory-6.svg',
