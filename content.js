@@ -326,7 +326,7 @@ export default {
       hotter: 'Plus chaud.',
       colder: 'Plus froid.',
       same: 'Ni plus chaud, ni plus froid.',
-      right: 'Trouvé, à {meters} m près. Joli coup d’œil.',
+      right: 'Trouvé, à {meters} m près. Je savais que tu t’en souviendrais.',
     },
   },
 
