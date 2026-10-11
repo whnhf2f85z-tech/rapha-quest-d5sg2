@@ -310,9 +310,9 @@ export default {
   //  8. Où est-ce ?
   // --------------------------------------------------------------------------
   place: {
-    // Une photo d'un endroit où vous étiez ensemble, n'importe où dans le monde.
+    // Une photo d'un lieu, n'importe où dans le monde.
     image: 'assets/photos/place.jpg',
-    imageAlt: 'Photo d’un endroit où nous étions ensemble',
+    imageAlt: 'Photo d’un lieu mystère',
     lat: 48.6353, // l'endroit exact de la photo
     lng: -2.0093,
     radiusMeters: 1000,
@@ -320,13 +320,13 @@ export default {
     text: {
       title: 'Où est-ce ?',
       instruction:
-        'On y était ensemble. Retrouve l’endroit exact sur la carte, n’importe où dans le monde. Un kilomètre de marge, pas un de plus.',
+        'Retrouve l’endroit exact de cette photo sur la carte, n’importe où dans le monde. Un kilomètre de marge, pas un de plus.',
       noPin: 'Pose d’abord une épingle sur la carte.',
       distance: 'Raté de {km} km.',
       hotter: 'Plus chaud.',
       colder: 'Plus froid.',
       same: 'Ni plus chaud, ni plus froid.',
-      right: 'Trouvé, à {meters} m près. Je savais que tu t’en souviendrais.',
+      right: 'Trouvé, à {meters} m près. Joli coup d’œil.',
     },
   },
 
