@@ -127,19 +127,13 @@ export default {
 
     function draw() {
       layer.clearLayers();
+      // No line while she plays (a straight line would hint at the way);
+      // the real fastest route is drawn once she has found it.
       if (done && best) {
         L.polyline(best.line, {
           color: '#94474e',
           weight: 5,
           opacity: 0.9,
-        }).addTo(layer);
-      } else {
-        const pts = [R.start, ...stops, R.end].map((p) => [p.lat, p.lng]);
-        L.polyline(pts, {
-          color: '#94474e',
-          weight: 3,
-          dashArray: '6 8',
-          opacity: 0.8,
         }).addTo(layer);
       }
       stops.forEach((s, i) => {

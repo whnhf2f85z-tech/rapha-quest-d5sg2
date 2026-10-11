@@ -58,7 +58,7 @@ export default {
     'Indice : la rue commence comme Aldo. Aldo a jeté son dé : tout ce qu’il reste de lui se cache dans le nom de la rue.',
     'Indice : les pièces du taquin le faisaient sans cesse. Garde le début du verbe, ajoute un i grec, et atterris.',
     'Indice : un pour tous, tous pour un. Ici, ce sont eux les patrons.',
-    'Depuis la boutique, on voit presque l’Hôtel de ville. (À REMPLACER)',
+    'Indice : depuis la porte, on aperçoit un magasin qui porte le nom de ce que chaque attaquant rêve de marquer.',
     'Le nom de la boutique commence par un B. (À REMPLACER)',
   ],
 
