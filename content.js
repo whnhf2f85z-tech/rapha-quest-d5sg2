@@ -95,7 +95,7 @@ export default {
   //  3. Memory
   // --------------------------------------------------------------------------
   memory: {
-    // 8 photos carrées (~400 px). À REMPLACER.
+    // 8 photos carrées (~400 px).
     images: [
       'assets/photos/memory-1.jpg',
       'assets/photos/memory-2.jpg',
@@ -104,7 +104,7 @@ export default {
       'assets/photos/memory-5.jpg',
       'assets/photos/memory-6.jpg',
       'assets/photos/memory-7.jpg',
-      'assets/photos/memory-8.svg',
+      'assets/photos/memory-8.jpg',
     ],
     text: {
       title: 'Memory',
