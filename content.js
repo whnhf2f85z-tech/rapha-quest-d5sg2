@@ -103,7 +103,7 @@ export default {
       'assets/photos/memory-4.jpg',
       'assets/photos/memory-5.jpg',
       'assets/photos/memory-6.jpg',
-      'assets/photos/memory-7.svg',
+      'assets/photos/memory-7.jpg',
       'assets/photos/memory-8.svg',
     ],
     text: {
