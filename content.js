@@ -59,7 +59,7 @@ export default {
     'Indice : les pièces du taquin le faisaient sans cesse. Garde le début du verbe, ajoute un i grec, et atterris.',
     'Indice : un pour tous, tous pour un. Ici, ce sont eux les patrons.',
     'Indice : comme à l’Inter Milan, ici, on a toujours le même objectif en vue.',
-    'Indice : depuis chez toi, il te faut entre 13 minutes et 1 h 49 pour y aller, selon ton moyen de locomotion. Je te conseille plutôt les 13 minutes.',
+    'Indice : depuis chez toi, c’est 13 minutes si tu prends le volant, 1 h 49 si tu fais confiance à tes mollets. À dos d’éléphant, je n’ai pas chronométré. Moi, je viserais les 13 minutes.',
   ],
 
   // --------------------------------------------------------------------------
@@ -329,7 +329,7 @@ export default {
     // Fabrique un formulaire gratuit sur formspree.io et colle son adresse ici,
     // ex. 'https://formspree.io/f/abcdwxyz'. Vide = c'est le bouton e-mail qui s'affiche.
     formspreeEndpoint: '',
-    leaEmail: 'lea@example.com', // À REMPLACER par ton adresse
+    leaEmail: 'lea.lurois@laposte.net',
     emailSubject: 'Raphaëlle a choisi sa demi-journée',
     days: [
       { id: '2026-10-21', short: 'Mer. 21 oct.', long: 'mercredi 21 octobre' },
