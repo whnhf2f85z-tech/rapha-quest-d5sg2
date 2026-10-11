@@ -240,6 +240,11 @@ export default {
   riddle: {
     question:
       'Dans une salle où chaque mot finissait par une voyelle, une seule personne avait le droit de nous corriger. Elle répondait à un nom en deux moitiés de {N} lettres. La première fut saluée, pleine de grâce, par un messager ailé ; la seconde dansa en noir pour tromper un prince. Son nom de famille ne m’intéresse pas : je veux ce qui le précède.',
+    // Le chiffre de la case {N} (« 5 » ou « cinq »), en hash : la case passe au vert.
+    numberAnswers: [
+      'ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d',
+      'ab8bf5eb556405527d7decd6af32402672efe99071e8417f9928bfa568063da6',
+    ],
     // Réponses acceptées (hash fabriqués avec tools/hash.html). Ne les écris jamais en clair ici.
     answers: [
       '29f2a4b5a27e78e422603e34bfcf1af8ee035e86c142afe570365be32bd7db74',
@@ -253,9 +258,10 @@ export default {
     ],
     text: {
       title: 'L’énigme',
-      instruction: 'Il manque un chiffre. Tu sais où le trouver. Les accents, majuscules et traits d’union, je m’en charge.',
+      instruction:
+        'D’abord, complète le chiffre manquant dans le texte : tu sais où le trouver. Ensuite, écris la réponse à l’énigme en dessous.',
       blankLabel: 'chiffre manquant',
-      placeholder: 'Ta réponse',
+      placeholder: 'Ta réponse à l’énigme',
       wrong: ['Non.', 'Toujours non. Mais j’admire la persévérance.', 'Tu chauffes peut-être. Ou pas.'],
     },
   },

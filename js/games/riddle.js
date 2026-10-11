@@ -1,5 +1,7 @@
-// Riddle with a blank where the sudoku number goes: she must bring the digit
-// from her own grid. Free-text answer, checked by hash.
+// Riddle with a small box where the sudoku number goes: she brings the digit
+// from her own grid, and the box turns green when it's right (checked by hash,
+// so the digit never appears in the code). The answer itself is a free text
+// below, also checked by hash.
 
 import { h, stageHeader, messageLine, renderNudges, replayAnimation } from '../ui.js';
 import { checkAnswer } from '../crypto.js';
@@ -10,13 +12,42 @@ export default {
     const R = ctx.C.riddle;
     const X = R.text;
     const saved = ctx.load() || { wrongs: 0, answer: '' };
+    const blanks = [];
+    const makeBlank = () => {
+      const box = h('input', {
+        class: `blank-input${saved.number ? ' right' : ''}`,
+        type: 'text',
+        inputmode: 'text',
+        autocomplete: 'off',
+        autocapitalize: 'off',
+        spellcheck: 'false',
+        maxlength: '6',
+        'aria-label': X.blankLabel,
+        disabled: !!saved.number || ctx.readOnly,
+      });
+      box.value = saved.number || '';
+      box.addEventListener('input', async () => {
+        const value = box.value;
+        if (!(await checkAnswer(value, R.numberAnswers)) || box.value !== value) return box.classList.remove('right');
+        saved.number = value.trim();
+        ctx.save(saved);
+        ctx.sound('tap');
+        blanks.forEach((b) => {
+          b.value = saved.number;
+          b.classList.add('right');
+          b.disabled = true;
+        });
+        field?.focus();
+      });
+      blanks.push(box);
+      return box;
+    };
     const question = h(
       'blockquote',
       { class: 'riddle' },
-      R.question
-        .split('{N}')
-        .map((part, i) => [i ? h('span', { class: 'blank', role: 'img', 'aria-label': X.blankLabel }) : null, part]),
+      R.question.split('{N}').map((part, i) => [i ? makeBlank() : null, part]),
     );
+    let field = null;
     const msg = messageLine();
     const nudgeBox = h('div', { class: 'nudges' });
 
@@ -27,7 +58,7 @@ export default {
       return;
     }
 
-    const field = h('input', {
+    field = h('input', {
       class: 'text-input',
       type: 'text',
       autocomplete: 'off',

@@ -1527,14 +1527,6 @@ h2 {
   gap: 12px;
 }
 
-.riddle .blank {
-  display: inline-block;
-  width: 2.2em;
-  height: 1em;
-  vertical-align: baseline;
-  border-bottom: 2px solid var(--accent);
-  margin: 0 0.15em;
-}
 
 .ranking {
   display: grid;
@@ -1657,4 +1649,29 @@ h2 {
 
 .rank-key:first-child {
   margin-left: 0;
+}
+
+.riddle .blank-input {
+  width: 3.2em;
+  margin: 0 0.15em;
+  padding: 0 0.2em;
+  border: 0;
+  border-bottom: 2px solid var(--accent);
+  border-radius: 6px 6px 0 0;
+  background: var(--paper-2);
+  font: inherit;
+  text-align: center;
+  color: var(--ink);
+}
+
+.riddle .blank-input:focus {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 1px;
+}
+
+.riddle .blank-input.right {
+  background: var(--ok-soft);
+  border-bottom-color: var(--ok);
+  color: var(--ok);
+  font-weight: 700;
 }
