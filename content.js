@@ -341,11 +341,11 @@ export default {
       { id: '2026-10-27', short: 'Mar. 27 oct.', long: 'mardi 27 octobre' },
     ],
     // Créneaux indisponibles, ex. '2026-10-24-matin' ou '2026-10-27-apres-midi'
-    disabled: ['2026-10-24-matin'],
+    disabled: [],
     text: {
       title: 'Ta demi-journée',
       instruction:
-        'Choisis une matinée ou un après-midi entre le 21 et le 27 octobre. Rassure-toi : ça ne prend qu’une demi-heure.',
+        'Choisis une demi-journée entre le 21 et le 27 octobre où tu pourras faire le trajet jusqu’à la destination mystère.',
       morning: 'Matin',
       afternoon: 'Après-midi',
       morningLong: 'le matin',
