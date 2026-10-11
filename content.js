@@ -439,8 +439,7 @@ export default {
   // --------------------------------------------------------------------------
   birthday: {
     title: 'Joyeux anniversaire, {name} !',
-    message:
-      'Ici, ton petit mot personnel. Quelques lignes, pas plus : l’essentiel est déjà dans la boutique. (À REMPLACER)',
+    message: 'Très joyeux anniversaire, chère Raphaëlle ! J’espère que ce jeu de piste aura été à la hauteur de tes attentes.',
     signature: '— Léa',
     photo: 'assets/photos/birthday.jpg', // facultatif : '' pour ne rien afficher
     photoCaption: 'Archive rarissime : la seule photo où je suis plus grande que toi. Elle sera encadrée.',
