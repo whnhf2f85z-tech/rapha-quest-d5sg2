@@ -142,7 +142,7 @@ export default {
         question: 'Combien de temps dure la gestation d’une éléphante ?',
         options: ['9 mois', '14 mois', '22 mois', '30 mois'],
         answer: 2,
-        fact: 'Près de deux ans : c’est la grossesse la plus longue de tous les mammifères terrestres.',
+        fact: 'Près de deux ans : c’est la grossesse la plus longue de tous les mammifères terrestres. Bien plus long que pour Andréa : neuf mois, et l’affaire était réglée.',
         nudge: 'Bien plus long que chez nous. Mais moins de deux ans et demi.',
       },
       {
