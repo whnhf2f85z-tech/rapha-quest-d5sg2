@@ -303,10 +303,10 @@ export default {
   // --------------------------------------------------------------------------
   place: {
     // Une photo d'un endroit où vous étiez ensemble, n'importe où dans le monde.
-    image: 'assets/photos/place.svg', // À REMPLACER par ta photo
+    image: 'assets/photos/place.jpg',
     imageAlt: 'Photo d’un endroit où nous étions ensemble',
-    lat: 47.3701, // À REMPLACER : l'endroit exact de la photo
-    lng: 8.544,
+    lat: 48.6353, // l'endroit exact de la photo
+    lng: -2.0093,
     radiusMeters: 1000,
     map: { lat: 30, lng: 10, zoom: 2 }, // la carte part du monde entier
     text: {
