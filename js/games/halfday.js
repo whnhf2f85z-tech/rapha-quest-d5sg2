@@ -1,5 +1,6 @@
-// Pick a half-day, confirm, send it to Léa through Formspree.
-// If sending fails, a mailto: button does the job and she can still continue.
+// Pick a half-day, confirm, send it to Léa. With a Formspree form it is sent
+// automatically; without one (or if sending fails) a ready-written e-mail opens
+// instead, and she can still continue.
 
 import { h, t, stageHeader, capitalise } from '../ui.js';
 
@@ -57,23 +58,51 @@ export default {
       );
     }
 
+    const mailHref = (slot) =>
+      `mailto:${D.leaEmail}?subject=${encodeURIComponent(D.emailSubject)}&body=${encodeURIComponent(
+        t(X.mailBody, { day: slot.day, part: slot.part }),
+      )}`;
+
+    function lockAndContinue(slot) {
+      ctx.update({ slot: { id: slot.id, day: slot.day, part: slot.part } });
+      area.replaceChildren(h('p', { class: 'locked-choice' }, t(X.locked, { day: slot.day, part: slot.part })));
+      ctx.onSolved();
+    }
+
     function renderConfirm(slot) {
       ctx.sound('tap');
-      const sendBtn = h('button', { class: 'btn btn-primary', onclick: () => send(slot, sendBtn) }, X.send);
+      const actions = h('div', { class: 'actions' });
+      // Without a Formspree form, go straight to the e-mail: no failed attempt first.
+      const primary = D.formspreeEndpoint
+        ? h('button', { class: 'btn btn-primary', onclick: () => send(slot, primary) }, X.send)
+        : h(
+            'a',
+            {
+              class: 'btn btn-primary',
+              href: mailHref(slot),
+              onclick: () =>
+                setTimeout(
+                  () =>
+                    actions.replaceChildren(
+                      h('button', { class: 'btn btn-primary', onclick: () => lockAndContinue(slot) }, X.continueAnyway),
+                      h('a', { class: 'btn btn-ghost', href: mailHref(slot) }, X.mailAgain),
+                    ),
+                  300,
+                ),
+            },
+            X.mailButton,
+          );
+      actions.append(primary, h('button', { class: 'btn btn-ghost', onclick: renderPicker }, X.change));
       area.replaceChildren(
         h(
           'div',
           { class: 'confirm-card' },
           h('p', { class: 'confirm-text' }, t(X.confirm, { Day: capitalise(slot.day), day: slot.day, part: slot.part })),
-          h(
-            'div',
-            { class: 'actions' },
-            sendBtn,
-            h('button', { class: 'btn btn-ghost', onclick: renderPicker }, X.change),
-          ),
+          D.formspreeEndpoint ? null : h('p', { class: 'muted' }, X.mailIntro),
+          actions,
         ),
       );
-      sendBtn.focus();
+      primary.focus();
     }
 
     async function send(slot, btn) {
@@ -89,7 +118,6 @@ export default {
       };
       let ok = false;
       try {
-        if (!D.formspreeEndpoint) throw new Error('no endpoint');
         const res = await fetch(D.formspreeEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -99,15 +127,12 @@ export default {
       } catch {
         ok = false;
       }
-      const lock = () => ctx.update({ slot: { id: slot.id, day: slot.day, part: slot.part } });
       if (ok) {
-        lock();
+        ctx.update({ slot: { id: slot.id, day: slot.day, part: slot.part } });
         area.replaceChildren(h('p', { class: 'message success' }, X.sent));
         ctx.onSolved();
         return;
       }
-      const body = t(X.mailBody, { day: slot.day, part: slot.part });
-      const href = `mailto:${D.leaEmail}?subject=${encodeURIComponent(D.emailSubject)}&body=${encodeURIComponent(body)}`;
       area.replaceChildren(
         h(
           'div',
@@ -116,21 +141,8 @@ export default {
           h(
             'div',
             { class: 'actions' },
-            h('a', { class: 'btn btn-primary', href }, X.mailButton),
-            h(
-              'button',
-              {
-                class: 'btn btn-ghost',
-                onclick: () => {
-                  lock();
-                  area.replaceChildren(
-                    h('p', { class: 'locked-choice' }, t(X.locked, { day: slot.day, part: slot.part })),
-                  );
-                  ctx.onSolved();
-                },
-              },
-              X.continueAnyway,
-            ),
+            h('a', { class: 'btn btn-primary', href: mailHref(slot) }, X.mailButton),
+            h('button', { class: 'btn btn-ghost', onclick: () => lockAndContinue(slot) }, X.continueAnyway),
           ),
         ),
       );
