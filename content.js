@@ -386,7 +386,7 @@ export default {
   // --------------------------------------------------------------------------
   final: {
     shop: { lat: 49.86565, lng: 2.3755 }, // l’entrée du magasin
-    radiusMeters: 200,
+    radiusMeters: 1000, // marge autour du magasin pour la serrure 1
     map: { lat: 46.6, lng: 2.4, zoom: 6 }, // vue de départ : la France entière, pour ne rien dévoiler
     accepted: [
       {
