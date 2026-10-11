@@ -445,8 +445,5 @@ export default {
     photo: 'assets/photos/birthday.svg', // facultatif : '' pour ne rien afficher
     video: '', // facultatif, ex. 'assets/photos/video.mp4' (remplace la photo)
     reopenCard: 'Revoir l’invitation',
-    goalShout: 'BUT !',
-    goalLabel: 'Un ballon file au fond des filets. Touche pour rejouer le but.',
-    goalReplay: 'Rejouer le but',
   },
 };
