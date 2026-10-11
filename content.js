@@ -328,7 +328,7 @@ export default {
   halfDay: {
     // Fabrique un formulaire gratuit sur formspree.io et colle son adresse ici,
     // ex. 'https://formspree.io/f/abcdwxyz'. Vide = c'est le bouton e-mail qui s'affiche.
-    formspreeEndpoint: '',
+    formspreeEndpoint: 'https://formspree.io/f/mjygobkr',
     leaEmail: 'lea.lurois@laposte.net',
     emailSubject: 'Raphaëlle a choisi sa demi-journée',
     days: [
