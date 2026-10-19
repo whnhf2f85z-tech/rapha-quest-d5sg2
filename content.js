@@ -109,7 +109,8 @@ export default {
     ],
     text: {
       title: 'Memory',
-      instruction: 'Retrouve les 8 paires en {max} coups maximum.',
+      instruction:
+        'Huit paires, {max} coups maximum. Au-delà, tout se remélange : on va enfin savoir si tu as une mémoire d’éléphant.',
       moves: '{n} coups',
       movesOne: '{n} coup', // 0 ou 1
       movesOf: '{n} coups sur {max}',
@@ -221,7 +222,8 @@ export default {
     highlight: { row: 5, col: 5 },
     text: {
       title: 'Sudoku',
-      instruction: 'Un classique. Garde un œil sur la case étoilée.',
+      instruction:
+        'Un sudoku, un vrai, avec des chiffres et zéro pitié. Garde un œil sur la case étoilée : elle va te resservir plus tôt que tu ne crois.',
       pencil: 'Notes',
       erase: 'Effacer',
       cellLabel: 'Ligne {r}, colonne {c}',
