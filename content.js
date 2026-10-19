@@ -262,7 +262,7 @@ export default {
     text: {
       title: 'L’énigme',
       instruction:
-        'D’abord, complète le chiffre manquant dans le texte : tu sais où le trouver. Ensuite, écris la réponse à l’énigme en dessous.',
+        'Il manque un mot dans ce texte, et tu l’as sous la main. Complète-le d’abord, puis réponds à l’énigme.',
       blankLabel: 'chiffre manquant',
       placeholder: 'Ta réponse à l’énigme',
       wrong: ['Non.', 'Toujours non. Mais j’admire la persévérance.', 'Tu chauffes peut-être. Ou pas.'],
