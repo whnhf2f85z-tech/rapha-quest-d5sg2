@@ -296,7 +296,7 @@ export default {
     text: {
       title: 'Le chemin le plus rapide',
       instruction:
-        'De la Somme jusqu’au canton de Zurich, par la route la plus rapide : quels départements et cantons traverses-tu, dans l’ordre ? Une erreur, et on repart de la Somme.',
+        'De la Somme jusqu’au canton de Zurich, par la route la plus rapide : quels départements et cantons traverses-tu, dans l’ordre ? Une erreur, et retour à la case Somme. Comme au Monopoly, sans les 200 euros.',
       placeholder: 'Département ou canton',
       add: 'Ajouter',
       startLabel: 'Départ',
