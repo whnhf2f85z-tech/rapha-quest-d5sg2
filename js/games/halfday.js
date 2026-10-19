@@ -15,7 +15,7 @@ export default {
     ];
     // The days start tomorrow (from her device's date), for D.daysCount days.
     // « 1 novembre » → « 1er novembre »
-    const fmt = (opts) => ({ format: (d) => new Intl.DateTimeFormat('fr-FR', opts).format(d).replace(/(^|\s)1(?=\s)/, '$11er') });
+    const fmt = (opts) => ({ format: (d) => new Intl.DateTimeFormat('fr-FR', opts).format(d).replace(/(^|\s)1(?=\s|$)/, '$11er') });
     const pad = (n) => String(n).padStart(2, '0');
     const days = Array.from({ length: D.daysCount || 7 }, (_, k) => {
       const d = new Date();
@@ -26,11 +26,15 @@ export default {
         short: capitalise(fmt({ weekday: 'short', day: 'numeric', month: 'short' }).format(d)),
         long: fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(d),
         plain: fmt({ day: 'numeric', month: 'long' }).format(d),
+        dayOnly: fmt({ day: 'numeric' }).format(d),
+        month: d.getMonth(),
       };
     });
+    // « entre le 20 et le 26 octobre », or « entre le 28 octobre et le 3 novembre »
+    const first = days[0].month === days.at(-1).month ? days[0].dayOnly : days[0].plain;
 
     const area = h('div', { class: 'halfday-area' });
-    el.append(stageHeader(X.title, t(X.instruction, { first: days[0].plain, last: days.at(-1).plain })), area);
+    el.append(stageHeader(X.title, t(X.instruction, { first, last: days.at(-1).plain })), area);
 
     // « mercredi 21 octobre, l'après-midi et jeudi 22 octobre, le matin »
     const describe = (slots) => joinList(slots.map((s) => `${s.day}, ${s.part}`), X.and);

@@ -323,7 +323,7 @@ export default {
     text: {
       title: 'Où est-ce ?',
       instruction:
-        'Retrouve l’endroit exact de cette photo sur la carte, n’importe où dans le monde. Un kilomètre de marge, pas un de plus.',
+        'Retrouve l’endroit exact de cette photo, n’importe où dans le monde. Tu as un kilomètre de marge car j’étais d’humeur généreuse.',
       noPin: 'Pose d’abord une épingle sur la carte.',
       distance: 'Raté de {km} km.',
       hotter: 'Plus chaud.',
@@ -350,7 +350,7 @@ export default {
     text: {
       title: 'Ta demi-journée',
       instruction:
-        'Choisis une ou plusieurs demi-journées entre le {first} et le {last} où tu pourras faire le trajet jusqu’à la destination mystère.',
+        'Choisis une ou plusieurs demi-journées entre le {first} et le {last} pour faire le trajet jusqu’à la destination mystère. Promis, ce n’est pas un piège.',
       morning: 'Matin',
       afternoon: 'Après-midi',
       morningLong: 'le matin',
