@@ -414,7 +414,8 @@ export default {
     ],
     text: {
       title: 'Le grand final',
-      instruction: 'Deux serrures. D’abord le quartier, ensuite le nom. Ton carnet est ton meilleur ami.',
+      instruction:
+        'Dernière ligne droite. Deux questions : d’abord le lieu, ensuite le nom précis de l’endroit cherché. Ton carnet a tout ce qu’il faut. Toi aussi, normalement. Ne déçois pas Sherlock.',
       lock1Title: 'Serrure 1 — le lieu',
       lock1Instruction: 'Pose l’épingle là où tu crois que se trouve la boutique.',
       noPin: 'Pose d’abord une épingle sur la carte.',
