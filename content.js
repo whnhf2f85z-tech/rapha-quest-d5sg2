@@ -187,7 +187,8 @@ export default {
     ],
     text: {
       title: 'Culture générale',
-      instruction: 'Sept questions sur les éléphants, zéro faute autorisée. Les éléphants comptent sur toi.',
+      instruction:
+        'Le jour où Andréa te posera des questions sur les nombreux éléphants de sa chambre, il faudra être au point. Je te prépare donc dès maintenant : sept questions, zéro faute autorisée. Les éléphants comptent sur toi !',
       counter: 'Question {n} sur {total}',
       wrong: [
         'Presque. Mais presque, ça ne compte qu’à la pétanque.',
