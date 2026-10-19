@@ -339,21 +339,15 @@ export default {
     formspreeEndpoint: 'https://formspree.io/f/mjygobkr',
     leaEmail: 'lea.lurois@laposte.net',
     emailSubject: 'Raphaëlle a choisi ses demi-journées',
-    days: [
-      { id: '2026-10-21', short: 'Mer. 21 oct.', long: 'mercredi 21 octobre' },
-      { id: '2026-10-22', short: 'Jeu. 22 oct.', long: 'jeudi 22 octobre' },
-      { id: '2026-10-23', short: 'Ven. 23 oct.', long: 'vendredi 23 octobre' },
-      { id: '2026-10-24', short: 'Sam. 24 oct.', long: 'samedi 24 octobre' },
-      { id: '2026-10-25', short: 'Dim. 25 oct.', long: 'dimanche 25 octobre' },
-      { id: '2026-10-26', short: 'Lun. 26 oct.', long: 'lundi 26 octobre' },
-      { id: '2026-10-27', short: 'Mar. 27 oct.', long: 'mardi 27 octobre' },
-    ],
+    // Les jours proposés commencent le lendemain du jour où elle arrive sur
+    // cette étape (arrivée le 23 → premier jour le 24), sur daysCount jours.
+    daysCount: 7,
     // Créneaux indisponibles, ex. '2026-10-24-matin' ou '2026-10-27-apres-midi'
     disabled: [],
     text: {
       title: 'Ta demi-journée',
       instruction:
-        'Choisis une ou plusieurs demi-journées entre le 21 et le 27 octobre où tu pourras faire le trajet jusqu’à la destination mystère.',
+        'Choisis une ou plusieurs demi-journées entre le {first} et le {last} où tu pourras faire le trajet jusqu’à la destination mystère.',
       morning: 'Matin',
       afternoon: 'Après-midi',
       morningLong: 'le matin',

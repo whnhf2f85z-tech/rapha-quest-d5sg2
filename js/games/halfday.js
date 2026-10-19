@@ -13,8 +13,24 @@ export default {
       { key: 'matin', label: X.morning, long: X.morningLong },
       { key: 'apres-midi', label: X.afternoon, long: X.afternoonLong },
     ];
+    // The days start tomorrow (from her device's date), for D.daysCount days.
+    // « 1 novembre » → « 1er novembre »
+    const fmt = (opts) => ({ format: (d) => new Intl.DateTimeFormat('fr-FR', opts).format(d).replace(/(^|\s)1(?=\s)/, '$11er') });
+    const pad = (n) => String(n).padStart(2, '0');
+    const days = Array.from({ length: D.daysCount || 7 }, (_, k) => {
+      const d = new Date();
+      d.setHours(12, 0, 0, 0);
+      d.setDate(d.getDate() + 1 + k);
+      return {
+        id: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+        short: capitalise(fmt({ weekday: 'short', day: 'numeric', month: 'short' }).format(d)),
+        long: fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(d),
+        plain: fmt({ day: 'numeric', month: 'long' }).format(d),
+      };
+    });
+
     const area = h('div', { class: 'halfday-area' });
-    el.append(stageHeader(X.title, X.instruction), area);
+    el.append(stageHeader(X.title, t(X.instruction, { first: days[0].plain, last: days.at(-1).plain })), area);
 
     // « mercredi 21 octobre, l'après-midi et jeudi 22 octobre, le matin »
     const describe = (slots) => joinList(slots.map((s) => `${s.day}, ${s.part}`), X.and);
@@ -27,7 +43,7 @@ export default {
     }
 
     const slotFor = (day, part) => ({ id: `${day.id}-${part.key}`, date: day.id, day: day.long, part: part.long });
-    const order = D.days.flatMap((day) => PARTS.map((part) => slotFor(day, part).id));
+    const order = days.flatMap((day) => PARTS.map((part) => slotFor(day, part).id));
     let picked = [];
 
     function renderPicker() {
@@ -40,7 +56,7 @@ export default {
         h(
           'div',
           { class: 'days' },
-          D.days.map((day) =>
+          days.map((day) =>
             h(
               'div',
               { class: 'day-card' },
