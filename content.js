@@ -84,7 +84,7 @@ export default {
     size: 3, // 3 = grille 3×3, 4 = grille 4×4
     text: {
       title: 'Le taquin',
-      instruction: '', // vide = pas de ligne sous le titre
+      instruction: 'On commence gentiment : glisse les pièces jusqu’à ce que tout rentre dans l’ordre. Bon échauffement :)',
       moves: '{n} coups',
       movesOne: '{n} coup', // 0 ou 1
       solved: 'Brillant. Comme prévu.',
